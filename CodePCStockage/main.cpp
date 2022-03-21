@@ -1,19 +1,32 @@
+//*********************************************************************************************
+//* Programme : main.cpp								Date : 18/03/2022
+//*														Dernière MAJ : 
+//*--------------------------------------------------------------------------------------------
+//*Programmeurs :	BERTHIER Thomas							Classe : BTSSN2
+//*					LARIDANT Julien
+//*					 
+//*--------------------------------------------------------------------------------------------
+//*
+//* BUT :  Use the classe ManageConvoy.
+//*
+//*********************************************************************************************
 #include <QtCore/QCoreApplication>
-#include "Conveyor.h"
-#include <Windows.h>
+#include "ManageConvoy.h"
 #include <qdebug.h>
+#include<Windows.h>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-	Conveyor * conveyor = new Conveyor();
-	if (conveyor->connectToModbus() == false) {
-		qDebug() << "Not connected";
-		return a.exec();
-	}
-	conveyor->startConveyor();
+	
+	ManageConvoy * manager = new ManageConvoy();
+	//Conect to ETZ512 card
+	manager->connectToHost();
+	//Start conveyor
+	manager->startConveyor();
 	Sleep(8000);
-	conveyor->stopConveyor();
+	//Stop conveyor
+	manager->stopConveyor();
 
     return a.exec();
 }

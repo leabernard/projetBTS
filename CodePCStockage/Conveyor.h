@@ -1,3 +1,15 @@
+//*********************************************************************************************
+//* Programme : Conveyor.h								Date : 18/03/2022
+//*														Dernière MAJ : 
+//*--------------------------------------------------------------------------------------------
+//*Programmeurs :	BERTHIER Thomas							Classe : BTSSN2
+//*					
+//*					 
+//*--------------------------------------------------------------------------------------------
+//*
+//* BUT : Manage the conveyor and the sensors.
+//*
+//*********************************************************************************************
 #pragma once
 
 #include <QObject>
@@ -8,10 +20,10 @@ class Conveyor : public QObject
 	Q_OBJECT
 
 private:
-	quint16 conveyor;
-	QByteArray sensor1;
-	QByteArray sensor2;
-	QByteArray sensorScaner;
+	quint16 conveyorAddress;
+	quint16 sensor1;
+	quint16 sensor2;
+	quint16 sensorScaner;
 	QModbusTcpClient * ETZ512;
 
 public:
@@ -21,4 +33,5 @@ public:
 	void stopConveyor();
 	void stateSensors();
 	bool connectToModbus();
+	QModbusTcpClient * getETZ512();
 };
