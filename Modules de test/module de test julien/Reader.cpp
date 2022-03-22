@@ -34,8 +34,7 @@ void Reader::receiveMessage() {
 		
 		qDebug() << str;
 	}
-}    //qDebug() << "ok2";//qDebug() << "ok2";//qDebug() << "ok2";//qDebug() << "ok2";//qDebug() << "ok2";
-//() << "ok2";
+}    //qDebug() << "ok2"; 
 Reader::~Reader()
 {
 }
