@@ -7,7 +7,7 @@
 //*					 
 //*--------------------------------------------------------------------------------------------
 //*
-//* BUT : Permet d'utiliser le convoyeur et de récupérer les capteurs photoélectrique des vérins et du scanner.
+//* BUT : Manage the conveyor and the sensors.
 //*
 //*********************************************************************************************
 #pragma once
@@ -20,10 +20,10 @@ class Conveyor : public QObject
 	Q_OBJECT
 
 private:
-	quint16 conveyor;
-	QByteArray sensor1;
-	QByteArray sensor2;
-	QByteArray sensorScaner;
+	quint16 conveyorAddress;
+	quint16 sensor1;
+	quint16 sensor2;
+	quint16 sensorScaner;
 	QModbusTcpClient * ETZ512;
 
 public:
@@ -33,4 +33,6 @@ public:
 	void stopConveyor();
 	void stateSensors();
 	bool connectToModbus();
+	QModbusTcpClient * getETZ512();
+
 };
