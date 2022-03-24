@@ -539,3 +539,4 @@ void QModbusTcpClient::presetMultipleRegistersFC16(quint16 startAddress, QVector
         delete trame;
     }
 }
+

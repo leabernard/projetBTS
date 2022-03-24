@@ -16,6 +16,7 @@
 #include "Conveyor.h"
 #include "Cylinder.h"
 #include "Elevator.h"
+#include "AllValuesSingleton.h"
 
 class ManageConvoy : public QObject
 {
@@ -27,6 +28,7 @@ private:
 	Elevator * elevator;
 	int checkoutNum;
 	QList<bool> sensorsDetectionArray;
+	AllValuesSingleton * instance;
 public:
 	ManageConvoy(QObject *parent = Q_NULLPTR);
 	~ManageConvoy();
@@ -45,5 +47,5 @@ public:
 	void display();
 
 public slots:
-	void testSensors(quint16 address, quint16 value);
+	void receiveSensorsValues(quint16 address, quint16 value);
 };

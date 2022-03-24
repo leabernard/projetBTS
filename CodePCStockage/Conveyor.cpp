@@ -44,7 +44,6 @@ void Conveyor::stopConveyor()
 //Method to ask for all sensors values
 void Conveyor::stateSensors()
 {
-	quint16 test;
 	ETZ512->readMultipleHoldingRegistersFC3(0001, 3);
 }
 //Method to connect to the ETZ card via TCP. Reten true if the connection is successful and else if not. 

@@ -27,7 +27,10 @@ int main(int argc, char *argv[])
 	//Sleep(1000);
 	//Stop conveyor
 	//manager->stopConveyor();
-	manager->stateSensors();
-
+	//manager->stateSensors();
+		manager->pushCylinder(1);
+		manager->pushCylinder(2);
+		manager->releaseCylinder(1);
+		manager->releaseCylinder(2);
     return a.exec();
 }
