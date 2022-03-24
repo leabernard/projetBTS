@@ -20,13 +20,13 @@ Reader::Reader(QObject *parent)
 	scanner->setPortName("COM1");
 	scanner->setBaudRate(9600);
 	if (scanner->open(QIODevice::ReadWrite)) {
-		//qDebug() << "ok";
+		
 		connect(scanner, SIGNAL(readyRead()), this, SLOT(receiveMessage()));
 	}
 }
 
 void Reader::receiveMessage() {
-	//qDebug() << "ok2";
+	
 	if (scanner->canReadLine())
 	{
 		QByteArray data = scanner->readLine();
@@ -34,7 +34,12 @@ void Reader::receiveMessage() {
 		
 		qDebug() << str;
 	}
-}    //qDebug() << "ok2"; 
+
+}   
 Reader::~Reader()
 {
+
 }
+
+
+
