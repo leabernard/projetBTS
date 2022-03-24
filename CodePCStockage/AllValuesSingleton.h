@@ -20,10 +20,10 @@ private:
 	bool elevator2;
 	bool elevator3;
 	static AllValuesSingleton * instance;
-	AllValuesSingleton(QObject *parent);
+	AllValuesSingleton(QObject *parent = Q_NULLPTR);
 	~AllValuesSingleton();
 public:
-	static AllValuesSingleton getInstance();
+	static AllValuesSingleton * getInstance();
 	void setSensors(bool sensor1, bool sensor2, bool sensorScaner);
 	QVector<bool> getSensors();
 	void setWeightSensors(float weight1, float weight2, float weight3);

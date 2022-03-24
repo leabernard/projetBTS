@@ -1,5 +1,7 @@
 #include "AllValuesSingleton.h"
 
+AllValuesSingleton * AllValuesSingleton::instance = nullptr;
+
 AllValuesSingleton::AllValuesSingleton(QObject *parent)
 	: QObject(parent)
 {
@@ -9,9 +11,11 @@ AllValuesSingleton::~AllValuesSingleton()
 {
 }
 
-AllValuesSingleton AllValuesSingleton::getInstance()
+AllValuesSingleton * AllValuesSingleton::getInstance()
 {
-	return AllValuesSingleton();
+	if (instance == nullptr)
+		instance = new AllValuesSingleton();
+	return instance;
 }
 
 void AllValuesSingleton::setSensors(bool sensor1, bool sensor2, bool sensorScaner)

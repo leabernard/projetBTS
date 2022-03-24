@@ -25,6 +25,6 @@ void Elevator::stateElevator(int checkoutNum)
 {
 }
 
-void Elevator::connextToHost()
+void Elevator::connectToArduino()
 {
 }

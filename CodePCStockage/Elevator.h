@@ -7,11 +7,11 @@ class Elevator : public QObject
 	Q_OBJECT
 
 public:
-	Elevator(QObject *parent);
+	Elevator(QObject *parent = Q_NULLPTR);
 	~Elevator();
 	void upElevator(int checkoutNum);
 	void downElevator(int checkoutNum);
 	void stateWeightSensor(int checkoutNum);
 	void stateElevator(int checkoutNum);
-	void connextToHost();
+	void connectToArduino();
 };

@@ -23,10 +23,11 @@ int main(int argc, char *argv[])
 	//Conect to ETZ512 card
 	manager->connectToHost();
 	//Start conveyor
-	manager->startConveyor();
-	Sleep(8000);
+	//manager->startConveyor();
+	//Sleep(1000);
 	//Stop conveyor
-	manager->stopConveyor();
+	//manager->stopConveyor();
+	manager->stateSensors();
 
     return a.exec();
 }

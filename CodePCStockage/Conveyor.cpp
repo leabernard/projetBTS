@@ -11,7 +11,7 @@
 //*
 //*********************************************************************************************
 #include <QtCore/QCoreApplication>
-#include "ManageConvoy.h"
+#include "Conveyor.h"
 #include <qdebug.h>
 #include<Windows.h>
 
@@ -20,6 +20,9 @@ Conveyor::Conveyor(QObject *parent)
 {
 	//Initialization of the address of the modbus components 
 	conveyorAddress = 0000;
+	sensor1 = 0001;
+	sensor2 = 0002;
+	sensorScanner = 0003;
 }
 
 Conveyor::~Conveyor()
@@ -31,23 +34,22 @@ void Conveyor::startConveyor()
 {
 	//Method to write a word through TCP
 	ETZ512->writeSingleWordFC6(conveyorAddress, 0000);
-	qDebug() << "tapis ON";
 }
 //Method to stop de conveyor
 void Conveyor::stopConveyor()
 {
 	//Method to write a word through TCP
 	ETZ512->writeSingleWordFC6(conveyorAddress, 0001);
-	qDebug() << "tapis OFF";
 }
 //Method to ask for all sensors values
 void Conveyor::stateSensors()
 {
+	quint16 test;
+	ETZ512->readMultipleHoldingRegistersFC3(0001, 3);
 }
 //Method to connect to the ETZ card via TCP. Reten true if the connection is successful and else if not. 
 bool Conveyor::connectToModbus() 
 {
-	QString test = "192.168.64.200";
 	ETZ512 = new QModbusTcpClient("192.168.64.200", 502);
 	//Method to conect to the ETZ512 card
 	ETZ512->connectToHost();
@@ -63,4 +65,19 @@ bool Conveyor::connectToModbus()
 QModbusTcpClient * Conveyor::getETZ512()
 {
 	return ETZ512;
+}
+
+quint16 Conveyor::getSensor1()
+{
+	return sensor1;
+}
+
+quint16 Conveyor::getSensor2()
+{
+	return sensor2;
+}
+
+quint16 Conveyor::getSensorScanner()
+{
+	return sensorScanner;
 }

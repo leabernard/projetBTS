@@ -12,7 +12,7 @@ private:
 	quint16 cylinder2;
 	QModbusTcpClient * ETZ512;
 public:
-	Cylinder(QObject *parent);
+	Cylinder(QObject *parent = Q_NULLPTR);
 	~Cylinder();
 	void pushCylinder(int checkoutNum);
 	void releaseCylinder(int checkoutum);

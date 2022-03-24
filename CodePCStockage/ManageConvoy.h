@@ -44,4 +44,6 @@ public:
 	void stateElevator();
 	void display();
 
+public slots:
+	void testSensors(quint16 address, quint16 value);
 };
