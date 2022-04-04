@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="pharmacien">
+    <file>pharmacie.png</file>
+  </qresource>
+</RCC>
