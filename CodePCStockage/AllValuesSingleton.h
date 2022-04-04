@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-
+#include <qmutex.h>
 class AllValuesSingleton : public QObject
 {
 	Q_OBJECT
@@ -22,9 +22,12 @@ private:
 	static AllValuesSingleton * instance;
 	AllValuesSingleton(QObject *parent = Q_NULLPTR);
 	~AllValuesSingleton();
+
+	QMutex lock;
+
 public:
 	static AllValuesSingleton * getInstance();
-	void setSensors(bool sensor1, bool sensor2, bool sensorScaner);
+	void setSensors(bool sensor1, bool sensor2, bool sensorScanner);
 	QVector<bool> getSensors();
 	void setWeightSensors(float weight1, float weight2, float weight3);
 	QVector<float> getWeightSensors();

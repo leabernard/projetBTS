@@ -1,19 +1,19 @@
 #pragma once
 
 #include <QObject>
-#include <qtcpsocket.h>
+#include <qtcpserver.h>
 
 class Arduino : public QObject
 {
 	Q_OBJECT
 
 private:
-	QTcpSocket * arduinoSocket;
+	QTcpServer * arduinoServer;
 public:
-	Arduino(QObject *parent);
+	Arduino(QObject *parent = Q_NULLPTR);
 	~Arduino();
 	void sendData(QByteArray data);
 
 public slots:
-	void receivedMessage();
+	void newConnection();
 };

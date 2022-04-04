@@ -14,23 +14,16 @@
 #include "ManageConvoy.h"
 #include <qdebug.h>
 #include<Windows.h>
+#include "MonMagnifiqueThread.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 	
-	ManageConvoy * manager = new ManageConvoy();
-	//Conect to ETZ512 card
-	manager->connectToHost();
-	//Start conveyor
-	//manager->startConveyor();
-	//Sleep(1000);
-	//Stop conveyor
-	//manager->stopConveyor();
-	//manager->stateSensors();
-		manager->pushCylinder(1);
-		manager->pushCylinder(2);
-		manager->releaseCylinder(1);
-		manager->releaseCylinder(2);
+	
+	GlobalThread * thread = new GlobalThread(&a);
+	thread->start();
+	
+
     return a.exec();
 }

@@ -12,15 +12,21 @@
 //*********************************************************************************************
 #include "ManageConvoy.h"
 
-ManageConvoy::ManageConvoy(QObject *parent)
+ManageConvoy::ManageConvoy(QCoreApplication * app, QObject *parent)
 	: QObject(parent)
 {
+	this->app = app;
+	endSemaphore = new QSemaphore(1);
 	conveyor = new Conveyor();
 	elevator = new Elevator();
+	termination = false;
 }
 
 ManageConvoy::~ManageConvoy()
 {
+	delete conveyor;
+	delete elevator;
+	delete endSemaphore;
 }
 //Method to start the conveyor and write the change in console log
 void ManageConvoy::startConveyor()
@@ -45,7 +51,9 @@ void ManageConvoy::stopConveyor()
 void ManageConvoy::connectToHost()
 {
 	if (conveyor->connectToModbus() == true) {
-		connect(conveyor->getETZ512(), SIGNAL(onReadMultipleHoldingRegistersSentenceSingleValue(quint16, quint16)), this, SLOT(testSensors(quint16, quint16)));
+		connect(conveyor->getETZ512(), SIGNAL(onReadMultipleHoldingRegistersSentence(quint16, QVector<quint16>)), this, SLOT(receiveSensorsValues(quint16, QVector<quint16>)));
+		//connect(app, SIGNAL(aboutToQuit()), this, SLOT(disconnectHost()));
+		connect(conveyor->getETZ512(), SIGNAL(disconnected()), this, SLOT(onConveyorDisconnected()));
 		cylinders = new Cylinder(conveyor->getETZ512());
 		qDebug() << "Connected";
 	} else {
@@ -104,21 +112,46 @@ void ManageConvoy::display()
 {
 }
 
-void ManageConvoy::receiveSensorsValues(quint16 address, quint16 value) {
+Conveyor * ManageConvoy::getConveyor()
+{
+	return conveyor;
+}
+
+
+
+void ManageConvoy::onConveyorDisconnected()
+{
+	if (termination)
+	{
+		releaseTerminationLock();
+	}
+}
+
+void ManageConvoy::disconnectHost()
+{
+	qDebug() << "Disconnected from host";
+	getTerminationLock();
+	termination = true;
+}
+
+void ManageConvoy::receiveSensorsValues(quint16 address, QVector<quint16> values) {
 	float value1;
 	float value2;
 	float value3;
-	if (address == conveyor->getSensor1()) {
-		qDebug() << "Capteur 1 : " + QString::number(value);
-		value1 = value;
-	}
-	if (address == conveyor->getSensor2()) {
-		qDebug() << "Capteur 2 : " + QString::number(value);
-		value2 = value;
-	}
-	if (address == conveyor->getSensorScanner()) {
-		qDebug() << "Capteur Scanner : " + QString::number(value);
-		value3 = value;
+	if (address == conveyor->getSensorScanner())
+	{
+				
+			qDebug() << "Capteur 1 : " + QString::number(values[1]);
+			value1 = values[1];
+		
+		
+			qDebug() << "Capteur 2 : " + QString::number(values[2]);
+			value2 = values[2];
+		
+		
+			qDebug() << "Capteur Scanner : " + QString::number(values[0]);
+			value3 = values[0];
+		
 	}
 	instance = AllValuesSingleton::getInstance();
 	instance->setSensors(value1, value2, value3);

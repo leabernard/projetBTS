@@ -13,16 +13,18 @@
 #include <QtCore/QCoreApplication>
 #include "Conveyor.h"
 #include <qdebug.h>
-#include<Windows.h>
 
 Conveyor::Conveyor(QObject *parent)
 	: QObject(parent)
 {
 	//Initialization of the address of the modbus components 
 	conveyorAddress = 0000;
-	sensor1 = 0001;
-	sensor2 = 0002;
-	sensorScanner = 0003;
+	//sensor1 = 0001;
+	//sensor2 = 0002;
+	//sensorScanner = 0003;
+	sensor1 = 0002;
+	sensor2 = 0003;
+	sensorScanner = 0001;
 }
 
 Conveyor::~Conveyor()
