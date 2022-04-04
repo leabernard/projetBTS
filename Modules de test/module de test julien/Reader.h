@@ -10,6 +10,9 @@ class Reader : public QObject
 private:
 	QSerialPort * scanner;
 
+
+	
+
 public:
 	Reader(QObject *parent = Q_NULLPTR);
 	~Reader();

@@ -1,17 +1,18 @@
 #include "readerSensor.h"
-#include "Reader.cpp"
+#include <qdebug.h>
 
 
 
 readerSensor::readerSensor(QObject * parent)
+		:QObject(parent)
 
-	 : QObject(parent)
-		{
-	detectiondrug = new QSerialPort();
-	detectiondrug->setPortName("");
-	detectiondrug->setBaudRate(9600);
-		if (detectiondrug->open(QIODevice::ReadWrite)) {
+{
+	
+	if (detectionDrug->canReadLine)
+		;
+	
+}
 
-			connect(detectiondrug, SIGNAL(readyRead()), this, SLOT(receiveMessage()));
-		}
+readerSensor::~readerSensor()
+{
 }
