@@ -54,9 +54,7 @@ protected:
 
 
 		int readPeriod = 150;
-		int writePeriod = 200;
 		int nextRead = readPeriod;
-		int nextWrite = writePeriod;
 
 		lastState = AllValuesSingleton::getInstance()->getSensors();
 
@@ -67,7 +65,8 @@ protected:
 		QQueue<int> retract2;
 		bool isTerminating = false;
 
-		while (manager->getConveyor()->getETZ512()->state() != QTcpSocket::UnconnectedState)
+		while (manager->getConveyor()->getETZ512()->state() != QTcpSocket::UnconnectedState) 
+			//&& manager->getElevator()->getArduino()->getArduinoSocket()->state() == QTcpSocket::UnconnectedState)
 		{
 			if (manager->isTermination())
 			{

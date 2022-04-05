@@ -100,14 +100,6 @@ void ManageConvoy::stateSensors()
 	}
 }
 
-void ManageConvoy::stateWeightSensors()
-{
-}
-
-void ManageConvoy::stateElevator()
-{
-}
-
 void ManageConvoy::display()
 {
 }
@@ -115,6 +107,11 @@ void ManageConvoy::display()
 Conveyor * ManageConvoy::getConveyor()
 {
 	return conveyor;
+}
+
+Elevator * ManageConvoy::getElevator()
+{
+	return elevator;
 }
 
 
@@ -135,21 +132,21 @@ void ManageConvoy::disconnectHost()
 }
 
 void ManageConvoy::receiveSensorsValues(quint16 address, QVector<quint16> values) {
-	float value1;
-	float value2;
-	float value3;
+	bool value1;
+	bool value2;
+	bool value3;
 	if (address == conveyor->getSensorScanner())
 	{
 				
-			qDebug() << "Capteur 1 : " + QString::number(values[1]);
+			//qDebug() << "Capteur 1 : " + QString::number(values[1]);
 			value1 = values[1];
 		
 		
-			qDebug() << "Capteur 2 : " + QString::number(values[2]);
+			//qDebug() << "Capteur 2 : " + QString::number(values[2]);
 			value2 = values[2];
 		
 		
-			qDebug() << "Capteur Scanner : " + QString::number(values[0]);
+			//qDebug() << "Capteur Scanner : " + QString::number(values[0]);
 			value3 = values[0];
 		
 	}

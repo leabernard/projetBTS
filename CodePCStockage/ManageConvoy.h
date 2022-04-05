@@ -49,10 +49,9 @@ public:
 	void sendElevator(int checkoutNum);
 	void checkAlone(bool alone);
 	void stateSensors();
-	void stateWeightSensors();
-	void stateElevator();
 	void display();
 	Conveyor * getConveyor();
+	Elevator * getElevator();
 	void disconnectHost();
 
 	bool isTermination() {

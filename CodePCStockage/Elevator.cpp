@@ -3,6 +3,7 @@
 Elevator::Elevator(QObject *parent)
 	: QObject(parent)
 {
+	arduino = new Arduino();
 }
 
 Elevator::~Elevator()
@@ -17,14 +18,9 @@ void Elevator::downElevator(int checkoutNum)
 {
 }
 
-void Elevator::stateWeightSensor(int checkoutNum)
+Arduino * Elevator::getArduino()
 {
+	return arduino;
 }
 
-void Elevator::stateElevator(int checkoutNum)
-{
-}
 
-void Elevator::connectToArduino()
-{
-}

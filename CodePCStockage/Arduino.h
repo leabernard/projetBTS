@@ -2,6 +2,8 @@
 
 #include <QObject>
 #include <qtcpserver.h>
+#include <qtcpsocket.h>
+#include "AllValuesSingleton.h"
 
 class Arduino : public QObject
 {
@@ -9,11 +11,15 @@ class Arduino : public QObject
 
 private:
 	QTcpServer * arduinoServer;
+	QTcpSocket * arduinoSocket;
+	AllValuesSingleton * instance;
 public:
 	Arduino(QObject *parent = Q_NULLPTR);
 	~Arduino();
-	void sendData(QByteArray data);
+	QTcpSocket * getArduinoSocket();
 
 public slots:
-	void newConnection();
+	void arduinoConnection();
+	void receivedData();
+	void arduinoDisconnected();
 };

@@ -41,7 +41,9 @@ QVector<bool> AllValuesSingleton::getSensors()
 void AllValuesSingleton::setWeightSensors(float weight1, float weight2, float weight3)
 {
 	lock.lock();
-	// ...
+	this->weight1 = weight1;
+	this->weight2 = weight2;
+	this->weight3 = weight3;
 	lock.unlock();
 }
 
@@ -53,7 +55,9 @@ QVector<float> AllValuesSingleton::getWeightSensors()
 void AllValuesSingleton::setElevatorState(bool elevator1, bool elevator2, bool elevator3)
 {
 	lock.lock();
-	// ...
+	this->elevator1 = elevator1;
+	this->elevator2 = elevator2;
+	this->elevator3 = elevator3;
 	lock.unlock();
 }
 
@@ -65,7 +69,9 @@ QVector<bool> AllValuesSingleton::getElevatorState()
 void AllValuesSingleton::setLengthSensors(float length1, float length2, float length3)
 {
 	lock.lock();
-	// ...
+	this->length1 = length1;
+	this->length2 = length2;
+	this->length3 = length3;
 	lock.unlock();
 }
 
