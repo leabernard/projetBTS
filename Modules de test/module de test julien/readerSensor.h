@@ -1,24 +1,19 @@
 #pragma once
 #include <QObject>
-#include <qserialport.h>
 
 
-class readerSensor: public QObject
-
+class readerSensor : public QObject
 	
 {
-	Q_OBJECT
+Q_OBJECT
 	
 private:
-	QSerialPort * detectionDrug;
-
+	void detectionDrug();
 
 public:
-	readerSensor(QObject *parent = Q_NULLPTR);
-	~readerSensor();
+	bool sensorDouchette = 1;
 
 public slots:
-	void detection();
 
 };
 
