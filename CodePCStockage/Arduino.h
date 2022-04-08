@@ -17,6 +17,7 @@ public:
 	Arduino(QObject *parent = Q_NULLPTR);
 	~Arduino();
 	QTcpSocket * getArduinoSocket();
+	void sendElevator(int checkoutNum);
 
 public slots:
 	void arduinoConnection();

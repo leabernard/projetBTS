@@ -26,7 +26,6 @@ class ManageConvoy : public QObject
 	Q_OBJECT
 
 private:
-	QCoreApplication * app;
 	Conveyor * conveyor;
 	Cylinder * cylinders;
 	Elevator * elevator;
@@ -37,17 +36,17 @@ private:
 	bool termination;
 
 public:
-	ManageConvoy(QCoreApplication * app, QObject *parent = Q_NULLPTR);
+	ManageConvoy(QObject *parent = Q_NULLPTR);
 	~ManageConvoy();
 	void startConveyor();
 	void stopConveyor();
 	void connectToHost();
 	void pushCylinder(int checkoutNum);
 	void releaseCylinder(int checkoutNum);
-	void checkWeight(int weight);
-	void checkLength(int length);
-	void sendElevator(int checkoutNum);
-	void checkAlone(bool alone);
+	int checkWeight(float weight, int checkoutNum);
+	int checkLength(float length, int checkoutNum);
+	int sendElevator(int checkoutNum);
+	int checkAlone(bool alone, int checkoutNum);
 	void stateSensors();
 	void display();
 	Conveyor * getConveyor();

@@ -12,10 +12,9 @@
 //*********************************************************************************************
 #include "ManageConvoy.h"
 
-ManageConvoy::ManageConvoy(QCoreApplication * app, QObject *parent)
+ManageConvoy::ManageConvoy(QObject *parent)
 	: QObject(parent)
 {
-	this->app = app;
 	endSemaphore = new QSemaphore(1);
 	conveyor = new Conveyor();
 	elevator = new Elevator();
@@ -76,21 +75,109 @@ void ManageConvoy::releaseCylinder(int checkoutNum)
 		qDebug() << "Verin " + QString::number(checkoutNum) + " desactive";
 	}
 }
-
-void ManageConvoy::checkWeight(int weight)
+//VOIR AVEC GREMONT POUR LA BOUCLE INFINIE DANS sendElevator() QUI EMPECHE LA RECUPERATION DES VALEURS
+int ManageConvoy::checkWeight(float weight, int checkoutNum)
 {
+	QVector<float> weightValues = AllValuesSingleton::getInstance()->getWeightSensors();
+	
+	if (checkoutNum == 1) {
+		weightValues[0]+= weight;
+	}
+	else if (checkoutNum == 2) {
+		weightValues[1] += weight;
+	}
+	else if (checkoutNum == 3) {
+		weightValues[2] += weight;
+	}
+	
+	if (weightValues[0] > 2.04) {
+		int result = sendElevator(1);
+		return result;
+	}
+	else if (weightValues[1] > 2.04) {
+		int result = sendElevator(2);
+		return result;
+	}
+	else if (weightValues[2] > 2.04) {
+		int result = sendElevator(3);
+		return result;
+	}
+	AllValuesSingleton::getInstance()->setWeightSensors(weightValues[0], weightValues[1], weightValues[2]);
+	return 0;
 }
 
-void ManageConvoy::checkLength(int length)
+int ManageConvoy::checkLength(float length, int checkoutNum)
 {
+	QVector<float> lenghtValues = AllValuesSingleton::getInstance()->getLengthSensors();
+
+	if (checkoutNum == 1) {
+		lenghtValues[0] += length;
+	}
+	else if (checkoutNum == 2) {
+		lenghtValues[1] += length;
+	}
+	else if (checkoutNum == 3) {
+		lenghtValues[2] += length;
+	}
+
+	if (lenghtValues[0] > 80.00) {
+		lenghtValues[0] = 0.00;
+		int result = sendElevator(1);
+		return result;
+	}
+	else if (lenghtValues[1] > 80.00) {
+		lenghtValues[1] = 0.00;
+		int result = sendElevator(2);
+		return result;
+	}
+	else if (lenghtValues[2] > 80.00) {
+		lenghtValues[2] = 0.00;
+		int result = sendElevator(3);
+		return result;
+	}
+	AllValuesSingleton::getInstance()->setLengthSensors(lenghtValues[0], lenghtValues[1], lenghtValues[2]);
+	return 0;
 }
 
-void ManageConvoy::sendElevator(int checkoutNum)
+int ManageConvoy::sendElevator(int checkoutNum)
 {
+	QVector<bool> elevatorState = AllValuesSingleton::getInstance()->getElevatorButton();
+
+	if (!elevatorState[0] && checkoutNum == 1) {
+		conveyor->stopConveyor();
+		elevator->getArduino()->sendElevator(checkoutNum);
+		return 1;
+	}
+	if (!elevatorState[1] && checkoutNum == 2) {
+		conveyor->stopConveyor();
+		elevator->getArduino()->sendElevator(checkoutNum);
+		return 2;
+	}
+	if (!elevatorState[2] && checkoutNum == 3) {
+		conveyor->stopConveyor();
+		elevator->getArduino()->sendElevator(checkoutNum);
+		return 3;
+	}
+		
+	
 }
 
-void ManageConvoy::checkAlone(bool alone)
+int ManageConvoy::checkAlone(bool alone, int checkoutNum)
 {
+	int result;
+	if (checkoutNum == 1 && alone) {
+		result = sendElevator(checkoutNum);
+		return result;
+	}
+	else if (checkoutNum == 2) {
+		result = sendElevator(checkoutNum);
+		return result;
+	}
+	else if (checkoutNum == 3) {
+		result = sendElevator(checkoutNum);
+		return result;
+	}
+	return result;
 }
 
 void ManageConvoy::stateSensors()

@@ -9,8 +9,8 @@
 #define BUTTON2 7 //D7
 #define BUTTON3 8 //D8
 #define WEIGHT1 A1//A1
-#define WEIGHT2 A2 //A2
-#define WEIGHT3 A3 //A3
+//#define WEIGHT2 A2 //A2
+//#define WEIGHT3 A3 //A3
 //Ethernet parameters
 byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};
 byte ip[] = {192, 168, 64, 201};

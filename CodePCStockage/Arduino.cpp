@@ -20,6 +20,12 @@ QTcpSocket * Arduino::getArduinoSocket()
 	return arduinoSocket;
 }
 
+void Arduino::sendElevator(int checkoutNum)
+{
+	qDebug() << "Send " << checkoutNum << " to arduino";
+	arduinoSocket->write(QByteArray::number(checkoutNum));
+}
+
 void Arduino::receivedData()
 {
 	QString receivedData = arduinoSocket->read(arduinoSocket->bytesAvailable());
@@ -32,9 +38,15 @@ void Arduino::receivedData()
 	float weight2 = splitedData.at(4).toFloat();
 	float weight3 = splitedData.at(5).toFloat();
 
+	bool elevatorState1 = splitedData.at(6).toInt();
+	bool elevatorState2 = splitedData.at(7).toInt();
+	bool elevatorState3 = splitedData.at(8).toInt();
+	qDebug() << elevatorState1 << elevatorState2 << elevatorState3;
+
 	instance = AllValuesSingleton::getInstance();
 	instance->setWeightSensors(weight1, weight2, weight3);
-	instance->setElevatorState(button1, button2, button3);
+	instance->setElevatorButton(button1, button2, button3);
+	instance->setElevatorState(elevatorState1, elevatorState2, elevatorState3);
 }
 
 void Arduino::arduinoDisconnected()

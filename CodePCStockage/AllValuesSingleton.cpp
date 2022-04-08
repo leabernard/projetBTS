@@ -49,21 +49,33 @@ void AllValuesSingleton::setWeightSensors(float weight1, float weight2, float we
 
 QVector<float> AllValuesSingleton::getWeightSensors()
 {
-	return QVector<float>();
+	lock.lock();
+	QVector<float> result;
+	result.push_back(weight1);
+	result.push_back(weight2);
+	result.push_back(weight3);
+	lock.unlock();
+	return result;
 }
 
-void AllValuesSingleton::setElevatorState(bool elevator1, bool elevator2, bool elevator3)
+void AllValuesSingleton::setElevatorButton(bool elevatorButton1, bool elevatorButton2, bool elevatorButton3)
 {
 	lock.lock();
-	this->elevator1 = elevator1;
-	this->elevator2 = elevator2;
-	this->elevator3 = elevator3;
+	this->elevatorButton1 = elevatorButton1;
+	this->elevatorButton2 = elevatorButton2;
+	this->elevatorButton3 = elevatorButton3;
 	lock.unlock();
 }
 
-QVector<bool> AllValuesSingleton::getElevatorState()
+QVector<bool> AllValuesSingleton::getElevatorButton()
 {
-	return QVector<bool>();
+	lock.lock();
+	QVector<bool> result;
+	result.push_back(elevatorButton1);
+	result.push_back(elevatorButton2);
+	result.push_back(elevatorButton3);
+	lock.unlock();
+	return result;
 }
 
 void AllValuesSingleton::setLengthSensors(float length1, float length2, float length3)
@@ -77,5 +89,31 @@ void AllValuesSingleton::setLengthSensors(float length1, float length2, float le
 
 QVector<float> AllValuesSingleton::getLengthSensors()
 {
-	return QVector<float>();
+	lock.lock();
+	QVector<float> result;
+	result.push_back(length1);
+	result.push_back(length2);
+	result.push_back(length3);
+	lock.unlock();
+	return result;
+}
+
+void AllValuesSingleton::setElevatorState(bool elevatorState1, bool elevatorState2, bool elevatorState3)
+{
+	lock.lock();
+	this->elevatorState1 = elevatorState1;
+	this->elevatorState2 = elevatorState2;
+	this->elevatorState3 = elevatorState3;
+	lock.unlock();
+}
+
+QVector<bool> AllValuesSingleton::getElevatorState()
+{
+	lock.lock();
+	QVector<bool> result;
+	result.push_back(elevatorState1);
+	result.push_back(elevatorState2);
+	result.push_back(elevatorState3);
+	lock.unlock();
+	return result;
 }
