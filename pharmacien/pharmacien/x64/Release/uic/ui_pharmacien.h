@@ -38,6 +38,9 @@ public:
     QLabel *labelStatue;
     QPushButton *boutonPatient;
     QLabel *label;
+    QLineEdit *lineEditIDCaisse;
+    QLabel *label_2;
+    QLabel *label_3;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -74,10 +77,19 @@ public:
         labelStatue->setGeometry(QRect(260, 250, 331, 51));
         boutonPatient = new QPushButton(centralWidget);
         boutonPatient->setObjectName(QString::fromUtf8("boutonPatient"));
-        boutonPatient->setGeometry(QRect(140, 20, 131, 21));
+        boutonPatient->setGeometry(QRect(290, 20, 131, 21));
         label = new QLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(340, 140, 71, 21));
+        lineEditIDCaisse = new QLineEdit(centralWidget);
+        lineEditIDCaisse->setObjectName(QString::fromUtf8("lineEditIDCaisse"));
+        lineEditIDCaisse->setGeometry(QRect(160, 20, 113, 20));
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setGeometry(QRect(20, 40, 71, 16));
+        label_3 = new QLabel(centralWidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(170, 40, 71, 16));
         pharmacienClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(pharmacienClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -106,6 +118,8 @@ public:
         labelStatue->setText(QString());
         boutonPatient->setText(QCoreApplication::translate("pharmacienClass", "Nom du patient", nullptr));
         label->setText(QString());
+        label_2->setText(QCoreApplication::translate("pharmacienClass", "Nom Patient", nullptr));
+        label_3->setText(QCoreApplication::translate("pharmacienClass", "ID Caisse", nullptr));
     } // retranslateUi
 
 };

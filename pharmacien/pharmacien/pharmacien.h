@@ -17,6 +17,8 @@ public:
 	QSqlDatabase db;
 	void medicament();
 	QString Nom;
+	QString idCaisse;
+	QString idOrdonnance;
 
 private:
     Ui::pharmacienClass ui;

@@ -1,18 +1,16 @@
 #include "readerSensor.h"
+#include "main.cpp"
 #include <qdebug.h>
 
 
 
-readerSensor::readerSensor(QObject * parent)
-		:QObject(parent)
-
+void readerSensor::detectionDrug() 
 {
+
 	
-	if (detectionDrug->canReadLine)
-		;
-	
+	if(bool sensorDouchette = 1)
+		{
+			qDebug () << "error";
+		}
 }
 
-readerSensor::~readerSensor()
-{
-}
