@@ -105,7 +105,7 @@
    <widget class="QPushButton" name="boutonPatient">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>290</x>
       <y>20</y>
       <width>131</width>
       <height>21</height>
@@ -126,6 +126,42 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEditIDCaisse">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>20</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>40</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nom Patient</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>40</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>ID Caisse</string>
     </property>
    </widget>
   </widget>
