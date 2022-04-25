@@ -1,12 +1,12 @@
 //**********************************************************************************************//
 //* Programme	:	reader.cpp																	//
-//*																	Date : 			17/03/2022  //
+//*																	Date : 			17/03/2022
 //*																	Last update : 18/03/2022	//
 //*---------------------------------------------------------------------------------------------//
 //* Developper	:	julien laridant																//
 //*---------------------------------------------------------------------------------------------//
 //*																								//
-//*																								//
+//* 
 //*																								//
 //**********************************************************************************************//
 #include "Reader.h"
@@ -30,18 +30,19 @@ void Reader::receiveMessage() {
 	if (scanner->canReadLine())
 	{
 		QByteArray data = scanner->readLine();
-		QString str = QString(data).remove("\r").remove("\n");
+		 result = QString(data).remove("\r").remove("\n");
 		
-		qDebug() << str;
+		qDebug() << result;
 	}
 
-}  
+
+}   
 Reader::~Reader()
-
-
 {
 
 }
-
+QString Reader::getresult() {
+	return result;
+}
 
 
