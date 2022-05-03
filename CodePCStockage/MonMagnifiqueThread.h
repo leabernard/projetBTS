@@ -84,18 +84,21 @@ protected:
 		QQueue<int> aloneQueue;
 		bool isTerminating = false;
 
+		//While we are connected to the automate
 		while (manager->getConveyor()->getETZ512()->state() != QTcpSocket::UnconnectedState ) 
 			//&& manager->getElevator()->getArduino()->getArduinoSocket()->state() == QTcpSocket::UnconnectedState)
 		{
+			//If the program is shutting down
 			if (manager->isTermination())
 			{
 				manager->stopConveyor();
 				manager->getConveyor()->getETZ512()->disconnectFromHost();
 				isTerminating = true;
 			}
-
+			//If the ptogram is running
 			if (!isTerminating)
 			{
+				//If the program is running without needing to send elevators we ontinue the timer and ask or values to the automate
 				if (state == ConveyorState::NORMAL)
 				{
 
@@ -111,9 +114,10 @@ protected:
 					QVector<bool> sensorsState = AllValuesSingleton::getInstance()->getSensors();
 					QVector<float> weightValues = AllValuesSingleton::getInstance()->getWeightSensors();
 
+					//If something gets scanned
 					if (reader->getScanned()) {
 						reader->setScanned(false);
-						//Une liste des numéros de caisse de avec comme valeurs de 1 a 3
+						//We push the checkout number in a list and organize the queues used to push the cylinders 
 						checkoutNumList.push_back(rand() % 3 + 1);
 						if (checkoutNumList.front() == 1) {
 							cylinder1WaitingLine.push_back(1);
@@ -126,10 +130,11 @@ protected:
 							cylinder1WaitingLine.push_back(0);
 							cylinder2WaitingLine.push_back(0);
 						}
-						//Première valeur est le poids du medicament scanné. Le poids max d'une caisse est de 2.04
+						//Première valeur est le poids du medicament scanné. Le poids max d'une caisse est de 2.04 Check if a checkout need to send its elevator because of the weight
 						//int weightResult = manager->checkWeight(2.5, checkoutNumList.front());
-						//Première valeur est la taille du medicament scanné. La taille max d'une caisse est de 80.00
+						//Première valeur est la taille du medicament scanné. La taille max d'une caisse est de 80.00 Check if a checkout need to send its elevator because of the length
 						//int lengthResult = manager->checkLength(85.0, checkoutNumList.front());
+						//We check which checkout sended its elevator and put a specific state for each checkout
 						/*if (weightResult != 0 || lengthResult != 0)
 						{
 							if (weightResult == 1 || lengthResult == 1) {
@@ -143,8 +148,10 @@ protected:
 							}
 							
 						}*/
-						
+
+						//We check if the current medicine needs to be conveyed alone 
 						int aloneResult = manager->checkAlone(1, checkoutNumList.front());
+						//Check which checkout sended its elevator and put a specific state for each checkout
 						if (aloneResult != 0) {
 							if (aloneResult == 1) {
 								state = WAIT_ELEVATOR1;
@@ -164,24 +171,27 @@ protected:
 
 					if (sensorsState[2] != lastState[2] && sensorsState[2])
 						medCount++;
-
+					
+					//If medicine is on the conveyor and the conveyor is not running we start the conveyor
 					if (medCount > 0 && !isRunning) {
 						manager->startConveyor();
 						isRunning = true;
 					}
 
+					//If ther is no more medicine and the conveyor is running we sotp the conveyor
 					if (medCount <= 0 && isRunning) {
 						manager->stopConveyor();
 						isRunning = false;
 					}
 
-
+					//If the sensor of the first cylinder changes state and the list of checkout isn't empty and the checkout is the number 1 we push a value that is equal to a time to wait before pushing or retracting a the cylinder
 					if ((sensorsState[0] != lastState[0] && sensorsState[0]) && !checkoutNumList.isEmpty() && checkoutNumList.front() == 1)
 					{
 						extract1.push_back(elapsed + 100);
 						retract1.push_back(elapsed + 350);
 					}
 
+					//If the sensor of the second cylinder changes state and the list of checkout isn't empty and the checkout is the number 2 we push a value that is equal to a time to wait before pushing or retracting a the cylinder
 					if ((sensorsState[1] != lastState[1] && sensorsState[1]) && !checkoutNumList.isEmpty() && checkoutNumList.front() == 2)
 					{
 						extract2.push_back(elapsed + 100);
@@ -189,70 +199,81 @@ protected:
 					}
 
 
-
+					//If the extract queue's first cylinder isn't empty and the value is smaller than the time elapsed we delete the value from the queue and push the cylinder
 					if (extract1.size() > 0 && elapsed > extract1[0])
 					{
 						extract1.pop_front();
 						manager->pushCylinder(1);
 					}
-
+					//If the extract queue's first cylinder isn't empty and the value is smaller than the time elapsed we delete the value from the queue and release the cylinder
 					if (retract1.size() > 0 && elapsed > retract1[0])
 					{
 						retract1.pop_front();
 						checkoutNumList.pop_front();
 						manager->releaseCylinder(1);
+						//If the medicine needs to be conveyed alone we send the elevator, stop the conveyor and change the state before deleting the value in the aloneQueue
 						if (aloneQueue.front() == 1 && aloneQueue.size() > 0) {
-							manager->getElevator()->getArduino()->sendElevator(aloneQueue.front());
+							manager->getArduino()->sendElevator(aloneQueue.front());
 							manager->stopConveyor();
 							state = WAIT_ELEVATOR1;
 							aloneQueue.pop_front();
 						}
 					}
 
+					//If the extract queue's second cylinder isn't empty and the value is smaller than the time elapsed we delete the value from the queue and push the cylinder
 					if (extract2.size() > 0 && elapsed > extract2[0])
 					{
 						extract2.pop_front();
 						manager->pushCylinder(2);
 					}
-
+					//If the extract queue's second cylinder isn't empty and the value is smaller than the time elapsed we delete the value from the queue and release the cylinder
 					if (retract2.size() > 0 && elapsed > retract2[0])
 					{
 						checkoutNumList.pop_front();
 						retract2.pop_front();
 						manager->releaseCylinder(2);
+						//If the medicine needs to be conveyed alone we send the elevator, stop the conveyor and change the state before deleting the value in the aloneQueue
 						if (aloneQueue.front() == 2 && aloneQueue.size() > 0) {
-							manager->getElevator()->getArduino()->sendElevator(aloneQueue.front());
+							manager->getArduino()->sendElevator(aloneQueue.front());
 							manager->stopConveyor();
 							state = WAIT_ELEVATOR2;
 							aloneQueue.pop_front();
 						}
 					}
-
+					//When the medicine fall in the elevator we substract it from the value of current medicine on the conveyor
 					if ((weightValues[0] > lastWeightValues[0] || weightValues[1] > lastWeightValues[1])) {
 						medCount--;
 
 					}
+					//When the medicine fall in the elevator we substract it from the value of current medicine on the conveyor
 					else if ((weightValues[2] > lastWeightValues[2]) && medCount > 0) {
 						medCount--;
+						//If the checkoutNumList isn't empty we delete the value of the curre checkout
 						if(!checkoutNumList.isEmpty())
 							checkoutNumList.pop_front();
+						//If the medicine needs to be conveyed alone we send the elevator, stop the conveyor and change the state before deleting the value in the aloneQueue
 						if (aloneQueue.front() == 3 && aloneQueue.size() > 0) {
-							manager->getElevator()->getArduino()->sendElevator(aloneQueue.front());
+							manager->getArduino()->sendElevator(aloneQueue.front());
 							manager->stopConveyor();
 							state = WAIT_ELEVATOR3;
 							aloneQueue.pop_front();
 						}
 					}
-
+					//We We stock the new values in a vector that will permit to each time compare the last values with the ones from the sensors
 					lastState = sensorsState;
 					lastWeightValues = weightValues;
 
 				}
+				//If we are in the state WAIT_ELEVATOR1 the program will be paused until the elevator 1 ascend to deliver medicine and descend back in its original position
 				else if (state == ConveyorState::WAIT_ELEVATOR1)
 				{
+					//Retrieve the states of the elevator 1 
 					QVector<bool> elevatorStates = AllValuesSingleton::getInstance()->getElevatorState();
+					//While the elevator is not here
 					while (elevatorStates[0]) {
+						//Retrieve the values of buttons linked to the state of the elevators. The button will be a simulation of the pharmacist sending back the elevator
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
+						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[0]) {
 							manager->startConveyor();
 							state = ConveyorState::NORMAL;
@@ -263,11 +284,16 @@ protected:
 					}
 
 				}
+				//If we are in the state WAIT_ELEVATOR2 the program will be paused until the elevator 2 ascend to deliver medicine and descend back in its original position
 				else if (state == ConveyorState::WAIT_ELEVATOR2)
 				{
+					//Retrieve the states of the elevator 2 
 					QVector<bool> elevatorStates = AllValuesSingleton::getInstance()->getElevatorState();
+					//While the elevator is not here
 					while (elevatorStates[1]) {
+						//Retrieve the values of buttons linked to the state of the elevators. The button will be a simulation of the pharmacist sending back the elevator
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
+						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[1]) {
 							manager->startConveyor();
 							state = ConveyorState::NORMAL;
@@ -277,11 +303,16 @@ protected:
 					}
 
 				}
+				//If we are in the state WAIT_ELEVATOR2 the program will be paused until the elevator 2 ascend to deliver medicine and descend back in its original position
 				else if (state == ConveyorState::WAIT_ELEVATOR3)
 				{
+				//Retrieve the states of the elevator 2 
 					QVector<bool> elevatorStates = AllValuesSingleton::getInstance()->getElevatorState();
+					//While the elevator is not here
 					while (elevatorStates[2]) {
+						//Retrieve the values of buttons linked to the state of the elevators. The button will be a simulation of the pharmacist sending back the elevator
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
+						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[2]) {
 							manager->startConveyor();
 							state = ConveyorState::NORMAL;

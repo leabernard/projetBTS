@@ -10,14 +10,14 @@ AllValuesSingleton::AllValuesSingleton(QObject *parent)
 AllValuesSingleton::~AllValuesSingleton()
 {
 }
-
+//Method to get the instance of the class
 AllValuesSingleton * AllValuesSingleton::getInstance()
 {
 	if (instance == nullptr)
 		instance = new AllValuesSingleton();
 	return instance;
 }
-
+//Method to set the values of the sensors on the conveyor
 void AllValuesSingleton::setSensors(bool sensor1, bool sensor2, bool sensorScanner)
 {
 	lock.lock();
@@ -26,7 +26,7 @@ void AllValuesSingleton::setSensors(bool sensor1, bool sensor2, bool sensorScann
 	this->sensorScanner = sensorScanner;
 	lock.unlock();
 }
-
+//Method to get the a vector of the sensors on the conveyor
 QVector<bool> AllValuesSingleton::getSensors()
 {
 	lock.lock();
@@ -37,7 +37,7 @@ QVector<bool> AllValuesSingleton::getSensors()
 	lock.unlock();
 	return result;
 }
-
+//Method to set the values of the weight sensors
 void AllValuesSingleton::setWeightSensors(float weight1, float weight2, float weight3)
 {
 	lock.lock();
@@ -46,7 +46,7 @@ void AllValuesSingleton::setWeightSensors(float weight1, float weight2, float we
 	this->weight3 = weight3;
 	lock.unlock();
 }
-
+//Method to get a vector of the weight values
 QVector<float> AllValuesSingleton::getWeightSensors()
 {
 	lock.lock();
@@ -57,7 +57,7 @@ QVector<float> AllValuesSingleton::getWeightSensors()
 	lock.unlock();
 	return result;
 }
-
+//Method to set the value of the button of the elevators
 void AllValuesSingleton::setElevatorButton(bool elevatorButton1, bool elevatorButton2, bool elevatorButton3)
 {
 	lock.lock();
@@ -66,7 +66,7 @@ void AllValuesSingleton::setElevatorButton(bool elevatorButton1, bool elevatorBu
 	this->elevatorButton3 = elevatorButton3;
 	lock.unlock();
 }
-
+//Method to get a vector of the state of the elevators
 QVector<bool> AllValuesSingleton::getElevatorButton()
 {
 	lock.lock();
@@ -77,7 +77,7 @@ QVector<bool> AllValuesSingleton::getElevatorButton()
 	lock.unlock();
 	return result;
 }
-
+//Method to set the length values
 void AllValuesSingleton::setLengthSensors(float length1, float length2, float length3)
 {
 	lock.lock();
@@ -86,7 +86,7 @@ void AllValuesSingleton::setLengthSensors(float length1, float length2, float le
 	this->length3 = length3;
 	lock.unlock();
 }
-
+//Method to get a vector of the length values
 QVector<float> AllValuesSingleton::getLengthSensors()
 {
 	lock.lock();
@@ -97,7 +97,7 @@ QVector<float> AllValuesSingleton::getLengthSensors()
 	lock.unlock();
 	return result;
 }
-
+//Method to set the values of the state of the elevators
 void AllValuesSingleton::setElevatorState(bool elevatorState1, bool elevatorState2, bool elevatorState3)
 {
 	lock.lock();
@@ -106,7 +106,7 @@ void AllValuesSingleton::setElevatorState(bool elevatorState1, bool elevatorStat
 	this->elevatorState3 = elevatorState3;
 	lock.unlock();
 }
-
+//Method to get a vector of the state of the elevators
 QVector<bool> AllValuesSingleton::getElevatorState()
 {
 	lock.lock();

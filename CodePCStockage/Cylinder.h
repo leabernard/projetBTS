@@ -16,5 +16,4 @@ public:
 	~Cylinder();
 	void pushCylinder(int checkoutNum);
 	void releaseCylinder(int checkoutNum);
-	QModbusTcpClient * getETZ512();
 };

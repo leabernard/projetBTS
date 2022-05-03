@@ -15,11 +15,11 @@
 #include <QObject>
 #include "Conveyor.h"
 #include "Cylinder.h"
-#include "Elevator.h"
 #include "AllValuesSingleton.h"
 #include <qcoreapplication.h>
 #include <qmutex.h>
 #include <qsemaphore.h>
+#include "Arduino.h"
 
 class ManageConvoy : public QObject
 {
@@ -28,9 +28,8 @@ class ManageConvoy : public QObject
 private:
 	Conveyor * conveyor;
 	Cylinder * cylinders;
-	Elevator * elevator;
+	Arduino * arduino;
 	int checkoutNum;
-	QList<bool> sensorsDetectionArray;
 	AllValuesSingleton * instance;
 	QSemaphore * endSemaphore;
 	bool termination;
@@ -50,7 +49,7 @@ public:
 	void stateSensors();
 	void display();
 	Conveyor * getConveyor();
-	Elevator * getElevator();
+	Arduino * getArduino();
 	void disconnectHost();
 
 	bool isTermination() {

@@ -17,27 +17,25 @@ ManageConvoy::ManageConvoy(QObject *parent)
 {
 	endSemaphore = new QSemaphore(1);
 	conveyor = new Conveyor();
-	elevator = new Elevator();
+	arduino = new Arduino();
 	termination = false;
 }
 
 ManageConvoy::~ManageConvoy()
 {
 	delete conveyor;
-	delete elevator;
 	delete endSemaphore;
 }
-//Method to start the conveyor and write the change in console log
+//Method to start the conveyor
 void ManageConvoy::startConveyor()
 {
-	//if we are connected we can continue
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
 		//Method to start the conveyor 
 		conveyor->startConveyor();
 		qDebug() << "tapis ON";
 	}
 }
-//Method to stop the conveyor and write the change in console log
+//Method to stop the conveyor
 void ManageConvoy::stopConveyor()
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
@@ -46,12 +44,11 @@ void ManageConvoy::stopConveyor()
 		qDebug() << "tapis OFF";
 	}
 }
-//Method to connect to the ETZ512 card
+//Method to connect to the ETZ512 card. If conection is succesful connect some slots to signals and instantiate the cylinders
 void ManageConvoy::connectToHost()
 {
 	if (conveyor->connectToModbus() == true) {
 		connect(conveyor->getETZ512(), SIGNAL(onReadMultipleHoldingRegistersSentence(quint16, QVector<quint16>)), this, SLOT(receiveSensorsValues(quint16, QVector<quint16>)));
-		//connect(app, SIGNAL(aboutToQuit()), this, SLOT(disconnectHost()));
 		connect(conveyor->getETZ512(), SIGNAL(disconnected()), this, SLOT(onConveyorDisconnected()));
 		cylinders = new Cylinder(conveyor->getETZ512());
 		qDebug() << "Connected";
@@ -59,7 +56,7 @@ void ManageConvoy::connectToHost()
 		qDebug() << "Not connected";
 	}
 }
-
+//Method to push a cylinder
 void ManageConvoy::pushCylinder(int checkoutNum)
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
@@ -67,15 +64,15 @@ void ManageConvoy::pushCylinder(int checkoutNum)
 		qDebug() << "Verin " + QString::number(checkoutNum) + " active";
 	}
 }
-
+//Method to release a cylinder
 void ManageConvoy::releaseCylinder(int checkoutNum)
 {
-	if (cylinders->getETZ512()->state() == QTcpSocket::ConnectedState) {
+	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
 		cylinders->releaseCylinder(checkoutNum);
 		qDebug() << "Verin " + QString::number(checkoutNum) + " desactive";
 	}
 }
-//VOIR AVEC GREMONT POUR LA BOUCLE INFINIE DANS sendElevator() QUI EMPECHE LA RECUPERATION DES VALEURS
+//Method to check to weight of an elevator and compare it with its own value plus the weight of the next medicine. If the weight is ahead of the maximum accepted, we send the elevator and return the number of the elevator. Else the new value is recorded and 0 is returned
 int ManageConvoy::checkWeight(float weight, int checkoutNum)
 {
 	QVector<float> weightValues = AllValuesSingleton::getInstance()->getWeightSensors();
@@ -105,7 +102,8 @@ int ManageConvoy::checkWeight(float weight, int checkoutNum)
 	AllValuesSingleton::getInstance()->setWeightSensors(weightValues[0], weightValues[1], weightValues[2]);
 	return 0;
 }
-
+//Method to check to length of an elevator and compare it with its own value plus the length of the next medicine.
+//If the length is ahead of the maximum accepted, we send the elevator and return the number of the elevator. Else the new value is recorded and 0 is returned
 int ManageConvoy::checkLength(float length, int checkoutNum)
 {
 	QVector<float> lenghtValues = AllValuesSingleton::getInstance()->getLengthSensors();
@@ -138,30 +136,30 @@ int ManageConvoy::checkLength(float length, int checkoutNum)
 	AllValuesSingleton::getInstance()->setLengthSensors(lenghtValues[0], lenghtValues[1], lenghtValues[2]);
 	return 0;
 }
-
+//Method to send an elevator. If the elevator isn't already sent, stop the coveyor and send the elevator. Return the number of the elevator sent.
 int ManageConvoy::sendElevator(int checkoutNum)
 {
 	QVector<bool> elevatorState = AllValuesSingleton::getInstance()->getElevatorButton();
 
 	if (!elevatorState[0] && checkoutNum == 1) {
 		conveyor->stopConveyor();
-		elevator->getArduino()->sendElevator(checkoutNum);
+		arduino->sendElevator(checkoutNum);
 		return 1;
 	}
 	if (!elevatorState[1] && checkoutNum == 2) {
 		conveyor->stopConveyor();
-		elevator->getArduino()->sendElevator(checkoutNum);
+		arduino->sendElevator(checkoutNum);
 		return 2;
 	}
 	if (!elevatorState[2] && checkoutNum == 3) {
 		conveyor->stopConveyor();
-		elevator->getArduino()->sendElevator(checkoutNum);
+		arduino->sendElevator(checkoutNum);
 		return 3;
 	}
 		
 	
 }
-
+//Method to check if a medicine needs to be sent alone in an elevator. If it's the case , we send the elevator and return the number of the elevator. Else 0 is returned
 int ManageConvoy::checkAlone(bool alone, int checkoutNum)
 {
 	int result;
@@ -179,26 +177,26 @@ int ManageConvoy::checkAlone(bool alone, int checkoutNum)
 	}
 	return result;
 }
-
+//Method to ask the automate for its sensors
 void ManageConvoy::stateSensors()
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
 		conveyor->stateSensors();
 	}
 }
-
+//Method to display the actual state of the system
 void ManageConvoy::display()
 {
 }
-
+//Method to get the instance of the conveyor class
 Conveyor * ManageConvoy::getConveyor()
 {
 	return conveyor;
 }
-
-Elevator * ManageConvoy::getElevator()
+//Method to get the instace of the elevator class
+Arduino * ManageConvoy::getArduino()
 {
-	return elevator;
+	return arduino;
 }
 
 
