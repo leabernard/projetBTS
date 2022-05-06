@@ -10,6 +10,7 @@
 #include "DataBase.h"
 #include "Reader.h"
 #include "Reader.cpp"
+#include <qdebug.h>
 
 
 
@@ -18,12 +19,25 @@ void DataBase::AssociateCommand()
 	
  
 
-		reader->getresult();
+	 reader->getresult();
+
+		int nombre = 100614-001;
+
+		if (nombre == reader->getresult() )
+		{
+			
+		}
+		else
+		{	
+			qDebug() << "erreur medicament non commander";
+		}
+
+
 
 
 }
 
-void DataBase::BDD()
+/*void DataBase::BDD()
 {
 	QSqlDatabase Database;
 
@@ -35,10 +49,12 @@ void DataBase::BDD()
 
 	//simuler nombre 
 	
-	rand 3 % 5
+	
+	 
 
 
-	QSqlQuery query;
+
+	/*QSqlQuery query;
 	if (query.exec("SELECT * FROM ordonnance"));
 	
 	{
@@ -46,4 +62,4 @@ void DataBase::BDD()
 
 	}
 
-}
+}*/

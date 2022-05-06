@@ -20,7 +20,7 @@ private:
 public: 
 
 	void AssociateCommand();
-	void BDD();
+	//void BDD();
 
 	
 
