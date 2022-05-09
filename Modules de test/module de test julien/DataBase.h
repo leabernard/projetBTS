@@ -19,8 +19,8 @@ private:
 
 public: 
 
-	void AssociateCommand();
-	//void BDD();
+	int AssociateCommand();
+	
 
 	
 

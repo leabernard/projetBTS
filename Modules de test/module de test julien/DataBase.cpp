@@ -13,9 +13,8 @@
 #include <qdebug.h>
 
 
-
-void DataBase::AssociateCommand()
-{reader = new Reader();
+int DataBase::AssociateCommand()
+{	reader = new Reader();
 	
  
 
@@ -25,8 +24,10 @@ void DataBase::AssociateCommand()
 
 		if (nombre == reader->getresult() )
 		{
-			
-		}
+			int aleatoire = rand() %3+1;
+			return aleatoire;
+		}   
+
 		else
 		{	
 			qDebug() << "erreur medicament non commander";
