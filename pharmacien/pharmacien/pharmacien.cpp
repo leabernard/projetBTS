@@ -1,11 +1,28 @@
 #include "pharmacien.h"
+#include "bilanCommande.h"
+#include"bilanFinancier.h"
 
 pharmacien::pharmacien(QWidget *parent)
 	: QMainWindow(parent)
 {
-
+	
 	
 	ui.setupUi(this);
+	ui.boutonPatient->setVisible(true);
+	ui.image->setVisible(true);
+	ui.label->setVisible(true);
+	ui.image->setVisible(true);
+	ui.labelQuantite->setVisible(true);
+	ui.labelStatue->setVisible(true);
+	ui.label_2->setVisible(true);
+	ui.label_3->setVisible(true);
+	ui.lineEditIDCaisse->setVisible(true);
+	ui.lineEditNom->setVisible(true);
+	ui.listeDeMedoc->setVisible(true);
+	ui.quantite->setVisible(true);
+	ui.tableCommande->setVisible(false);
+	ui.validerCommande->setVisible(true);
+	ui.tableFinancier->setVisible(false);
 
 	QSqlDatabase Database;
 
@@ -52,6 +69,22 @@ void pharmacien::patient() {
 
 }
 
+Ui::pharmacienClass * pharmacien::getUI()
+{
+	return &ui;
+}
+
+void pharmacien::setBilanCommande(bilanCommande * bilanPtr)
+{
+	this->bilanPtr = bilanPtr;
+}
+
+void pharmacien::setBilanFinancier(bilanFinancier * bilanFins)
+{
+	this->bilanFins = bilanFins;
+}
+
+
 void pharmacien::commande()
 {
 	QString IDMedicament;
@@ -89,4 +122,13 @@ void pharmacien::commande()
 	QString SQLcommande = "INSERT INTO commande ( idmedicament,Nom,idordonnance,quantite_livrer) VALUES ('"+ IDMedicament +"','"+ this->Nom +"','"+ idOrdonnance +"','"+ Quantiter +"')";
 	QSqlQuery querySQLcommande;
 	querySQLcommande.exec(SQLcommande);
+}
+
+void pharmacien::switchFenetre()
+{
+	bilanPtr->switchFenetre();
+}
+void pharmacien::Finance()
+{
+	bilanFins->Finance();
 }

@@ -1,11 +1,12 @@
 #include "readerSensor.h"
-#include "main.cpp"
+//#include "main.cpp"
 #include <qdebug.h>
 #include "Reader.cpp"
 
 
 
-readerSensor::readerSensor() {
+readerSensor::readerSensor() 
+{
 	reader = new Reader();
 }
 
