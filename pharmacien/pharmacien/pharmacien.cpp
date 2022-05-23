@@ -1,6 +1,5 @@
 #include "pharmacien.h"
 #include "bilanCommande.h"
-#include"bilanFinancier.h"
 
 pharmacien::pharmacien(QWidget *parent)
 	: QMainWindow(parent)
@@ -79,12 +78,6 @@ void pharmacien::setBilanCommande(bilanCommande * bilanPtr)
 	this->bilanPtr = bilanPtr;
 }
 
-void pharmacien::setBilanFinancier(bilanFinancier * bilanFins)
-{
-	this->bilanFins = bilanFins;
-}
-
-
 void pharmacien::commande()
 {
 	QString IDMedicament;
@@ -127,8 +120,4 @@ void pharmacien::commande()
 void pharmacien::switchFenetre()
 {
 	bilanPtr->switchFenetre();
-}
-void pharmacien::Finance()
-{
-	bilanFins->Finance();
 }
