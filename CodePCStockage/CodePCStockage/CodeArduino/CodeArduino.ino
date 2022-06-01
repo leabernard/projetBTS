@@ -14,7 +14,7 @@
 //Ethernet parameters
 byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};
 byte ip[] = {192, 168, 64, 201};
-byte server[] = {192, 168, 64, 232};
+byte server[] = {192, 168, 65, 103};
 int retry = 0;
 //true when elevator is up 
 bool elevator1 = false;
