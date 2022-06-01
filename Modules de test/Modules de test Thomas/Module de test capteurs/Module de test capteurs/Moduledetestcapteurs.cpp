@@ -2,9 +2,9 @@
 
 
 Moduledetestcapteurs::Moduledetestcapteurs(QWidget *parent)
-    : QMainWindow(parent)
+	: QMainWindow(parent)
 {
-    ui.setupUi(this);
+	ui.setupUi(this);
 	conveyor = new Conveyor();
 	arduino = new Arduino();
 }
@@ -40,9 +40,9 @@ void Moduledetestcapteurs::display()
 	QString length2 = QString::number(length[1]);
 	QString length3 = QString::number(length[2]);
 
-	QString elevatorbuton1 = QString::number(elevatorButton[0]);
-	QString elevatorbuton2 = QString::number(elevatorButton[1]);
-	QString elevatorbuton3 = QString::number(elevatorButton[2]);
+	QString elevatorbutton1 = QString::number(elevatorButton[0]);
+	QString elevatorbutton2 = QString::number(elevatorButton[1]);
+	QString elevatorbutton3 = QString::number(elevatorButton[2]);
 
 	QString elevatorstate1 = QString::number(elevatorState[0]);
 	QString elevatorstate2 = QString::number(elevatorState[1]);
@@ -57,9 +57,9 @@ void Moduledetestcapteurs::display()
 	ui.textEdit->append(length1);
 	ui.textEdit->append(length2);
 	ui.textEdit->append(length3);
-	ui.textEdit->append(elevatorbuton1);
-	ui.textEdit->append(elevatorbuton2);
-	ui.textEdit->append(elevatorbuton3);
+	ui.textEdit->append(elevatorbutton1);
+	ui.textEdit->append(elevatorbutton2);
+	ui.textEdit->append(elevatorbutton3);
 	ui.textEdit->append(elevatorstate1);
 	ui.textEdit->append(elevatorstate2);
 	ui.textEdit->append(elevatorstate3);

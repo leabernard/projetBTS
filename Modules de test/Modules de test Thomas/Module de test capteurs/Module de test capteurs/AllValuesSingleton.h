@@ -16,12 +16,12 @@ private:
 	float length1 = 0.0;
 	float length2 = 0.0;
 	float length3 = 0.0;
-	bool elevatorButton1;
-	bool elevatorButton2;
-	bool elevatorButton3;
-	bool elevatorState1;
-	bool elevatorState2;
-	bool elevatorState3;
+	bool elevatorButton1 = false;
+	bool elevatorButton2 = false;
+	bool elevatorButton3 = false;
+	bool elevatorState1 = false;
+	bool elevatorState2 = false;
+	bool elevatorState3 = false;
 	static AllValuesSingleton * instance;
 	AllValuesSingleton(QObject *parent = Q_NULLPTR);
 	~AllValuesSingleton();

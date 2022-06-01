@@ -1,6 +1,6 @@
 //*********************************************************************************************
 //* Programme : Conveyor.cpp								Date : 18/03/2022
-//*														Dernière MAJ : 
+//*														Derniere MAJ : 
 //*--------------------------------------------------------------------------------------------
 //*Programmeurs :	BERTHIER Thomas							Classe : BTSSN2
 //*					
@@ -29,7 +29,7 @@ Conveyor::Conveyor(QObject *parent)
 
 Conveyor::~Conveyor()
 {
-	
+
 }
 //Method to start the conveyor
 void Conveyor::startConveyor()
@@ -49,7 +49,7 @@ void Conveyor::stateSensors()
 	ETZ512->readMultipleHoldingRegistersFC3(0001, 3);
 }
 //Method to connect to the ETZ card via TCP. Reten true if the connection is successful and else if not. 
-bool Conveyor::connectToModbus() 
+bool Conveyor::connectToModbus()
 {
 	ETZ512 = new QModbusTcpClient("192.168.64.200", 502);
 	//Method to conect to the ETZ512 card

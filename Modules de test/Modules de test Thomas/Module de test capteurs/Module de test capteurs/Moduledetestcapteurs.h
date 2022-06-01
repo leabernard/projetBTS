@@ -11,16 +11,16 @@
 
 class Moduledetestcapteurs : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    Moduledetestcapteurs(QWidget *parent = Q_NULLPTR);
+	Moduledetestcapteurs(QWidget *parent = Q_NULLPTR);
 	void stateSensors();
-	
+
 
 
 private:
-    Ui::ModuledetestcapteursClass ui;
+	Ui::ModuledetestcapteursClass ui;
 	Conveyor * conveyor;
 	AllValuesSingleton * instance;
 	Arduino * arduino;
