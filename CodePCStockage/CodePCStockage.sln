@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.1972
+VisualStudioVersion = 15.0.28307.1300
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodePCStockage", "CodePCStockage\CodePCStockage.vcxproj", "{E50A4188-2DD8-4D81-8A3B-D8822B02C050}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CodePCStockage", "CodePCStockage\CodePCStockage.vcxproj", "{45B98E4A-1F6C-487A-8672-AB5DA4E3D49C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E50A4188-2DD8-4D81-8A3B-D8822B02C050}.Debug|x64.ActiveCfg = Debug|x64
-		{E50A4188-2DD8-4D81-8A3B-D8822B02C050}.Debug|x64.Build.0 = Debug|x64
-		{E50A4188-2DD8-4D81-8A3B-D8822B02C050}.Release|x64.ActiveCfg = Release|x64
-		{E50A4188-2DD8-4D81-8A3B-D8822B02C050}.Release|x64.Build.0 = Release|x64
+		{45B98E4A-1F6C-487A-8672-AB5DA4E3D49C}.Debug|x64.ActiveCfg = Debug|x64
+		{45B98E4A-1F6C-487A-8672-AB5DA4E3D49C}.Debug|x64.Build.0 = Debug|x64
+		{45B98E4A-1F6C-487A-8672-AB5DA4E3D49C}.Release|x64.ActiveCfg = Release|x64
+		{45B98E4A-1F6C-487A-8672-AB5DA4E3D49C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {E16442F3-5A8B-4EBC-9C46-B550F2EF81CD}
+		SolutionGuid = {61AF28EB-0BBD-4341-93A2-AD152B671D8F}
 	EndGlobalSection
 EndGlobal
