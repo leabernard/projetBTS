@@ -1,8 +1,8 @@
 #include "TCPServer.h"
-TCPServer::TCPServer(Database * db, QObject *parent)
+TCPServer::TCPServer(/*Database * db,*/ QObject *parent)
 	: QObject(parent)
 {
-	this->db = db;
+	//this->db = db;
 	server = new QTcpServer(this);
 	server->listen(QHostAddress::AnyIPv4, 777);
 	connect(server, SIGNAL(newConnection()), this, SLOT(onServerNewConnection()));
@@ -29,10 +29,17 @@ void TCPServer::onServerNewConnection()
 }
 void TCPServer::onClientNewCommunication()
 {
+	//get the socket of the sender and read the message
 	QTcpSocket * socket = qobject_cast<QTcpSocket*>(sender());
 	QByteArray data = socket->read(socket->bytesAvailable());
-	QString message = data.QString::fromStdString(message.toStdString());
-	QList<QString> messageSplitedBySemicolon = message.split(",");
+
+	//Put the message (a json) in a QJsonDocument and get the content of the document
+	QJsonDocument jsonMessage = QJsonDocument::fromJson(data);
+	QJsonObject jsonContent = jsonMessage.object();
+
+	//get the wanted information thanks to the key name   
+	QJsonValue type = jsonContent.value("Type");
+	QJsonValue content = jsonContent.value("Content");
 
 }
 

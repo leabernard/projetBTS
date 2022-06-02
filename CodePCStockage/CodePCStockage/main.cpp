@@ -14,7 +14,7 @@
 #include "ManageConvoy.h"
 #include <qdebug.h>
 #include<Windows.h>
-#include "MonMagnifiqueThread.h"
+#include "GlobalThread.h"
 
 int main(int argc, char *argv[])
 {

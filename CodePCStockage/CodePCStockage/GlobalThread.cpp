@@ -1,4 +1,4 @@
-#include "MonMagnifiqueThread.h"
+#include "GlobalThread.h"
 
 ManageConvoy * GlobalThread::managerRef = NULL;
 

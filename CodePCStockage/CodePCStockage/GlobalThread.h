@@ -38,7 +38,6 @@ class GlobalThread : public QThread
 	ConveyorState state;
 	QCoreApplication * app;
 	QTime timer;
-	QTime timer2;
 	QVector<bool> lastState;
 	QVector<float> lastWeightValues;
 	QVector<int> checkoutNumList;
@@ -103,7 +102,6 @@ protected:
 				{
 
 					int elapsed = timer.elapsed();
-					int elapsedWrite = timer2.elapsed();
 					if (elapsed >= nextRead)
 					{
 						manager->stateSensors();
@@ -185,17 +183,24 @@ protected:
 					}
 
 					//If the sensor of the first cylinder changes state and the list of checkout isn't empty and the checkout is the number 1 we push a value that is equal to a time to wait before pushing or retracting a the cylinder
-					if ((sensorsState[0] != lastState[0] && sensorsState[0]) && !checkoutNumList.isEmpty() && checkoutNumList.front() == 1)
+					if ((sensorsState[0] != lastState[0] && sensorsState[0]) && !cylinder1WaitingLine.isEmpty() && cylinder1WaitingLine.front() == 1)
 					{
 						extract1.push_back(elapsed + 100);
 						retract1.push_back(elapsed + 350);
 					}
+					else if ((sensorsState[0] != lastState[0] && sensorsState[0]) && !cylinder1WaitingLine.isEmpty() && cylinder1WaitingLine.front() == 0) {
+						cylinder1WaitingLine.pop_front();
+					}
 
 					//If the sensor of the second cylinder changes state and the list of checkout isn't empty and the checkout is the number 2 we push a value that is equal to a time to wait before pushing or retracting a the cylinder
-					if ((sensorsState[1] != lastState[1] && sensorsState[1]) && !checkoutNumList.isEmpty() && checkoutNumList.front() == 2)
+					if ((sensorsState[1] != lastState[1] && sensorsState[1]) && !cylinder2WaitingLine.isEmpty() && cylinder2WaitingLine.front() == 1)
 					{
 						extract2.push_back(elapsed + 100);
 						retract2.push_back(elapsed + 350);
+					}
+					else if ((sensorsState[1] != lastState[1] && sensorsState[1]) && !cylinder2WaitingLine.isEmpty() && cylinder2WaitingLine.front() == 0) {
+						cylinder2WaitingLine.pop_front();
+
 					}
 
 
@@ -210,7 +215,9 @@ protected:
 					{
 						retract1.pop_front();
 						checkoutNumList.pop_front();
+						cylinder1WaitingLine.pop_front();
 						manager->releaseCylinder(1);
+						medCount--;
 						//If the medicine needs to be conveyed alone we send the elevator, stop the conveyor and change the state before deleting the value in the aloneQueue
 						if (aloneQueue.front() == 1 && aloneQueue.size() > 0) {
 							manager->getArduino()->sendElevator(aloneQueue.front());
@@ -231,19 +238,16 @@ protected:
 					{
 						checkoutNumList.pop_front();
 						retract2.pop_front();
+						cylinder2WaitingLine.pop_front();
 						manager->releaseCylinder(2);
+						medCount--;
 						//If the medicine needs to be conveyed alone we send the elevator, stop the conveyor and change the state before deleting the value in the aloneQueue
 						if (aloneQueue.front() == 2 && aloneQueue.size() > 0) {
-							manager->getArduino()->sendElevator(aloneQueue.front());
+							manager->sendElevator(aloneQueue.front());
 							manager->stopConveyor();
 							state = WAIT_ELEVATOR2;
 							aloneQueue.pop_front();
 						}
-					}
-					//When the medicine fall in the elevator we substract it from the value of current medicine on the conveyor
-					if ((weightValues[0] > lastWeightValues[0] || weightValues[1] > lastWeightValues[1])) {
-						medCount--;
-
 					}
 					//When the medicine fall in the elevator we substract it from the value of current medicine on the conveyor
 					else if ((weightValues[2] > lastWeightValues[2]) && medCount > 0) {
@@ -275,10 +279,12 @@ protected:
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
 						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[0]) {
-							manager->startConveyor();
+							if(medCount != 0)
+								manager->startConveyor();
 							state = ConveyorState::NORMAL;
 							break;
 						}
+						manager->display();
 						app->processEvents();
 							
 					}
@@ -295,10 +301,12 @@ protected:
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
 						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[1]) {
-							manager->startConveyor();
+							if (medCount != 0)
+								manager->startConveyor();
 							state = ConveyorState::NORMAL;
 							break;
 						}
+						manager->display();
 						app->processEvents();
 					}
 
@@ -314,16 +322,18 @@ protected:
 						QVector<bool> elevatorButtons = AllValuesSingleton::getInstance()->getElevatorButton();
 						//When the button is pressed we restart the conveyor and come back in the NORMAL state
 						if (elevatorButtons[2]) {
-							manager->startConveyor();
+							if (medCount != 0)
+								manager->startConveyor();
 							state = ConveyorState::NORMAL;
 							break;
 						}
+						manager->display();
 						app->processEvents();
 					}
 
 				}
 			}
-
+			manager->display();
 			app->processEvents();
 		}
 

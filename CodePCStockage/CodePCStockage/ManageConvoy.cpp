@@ -30,18 +30,14 @@ ManageConvoy::~ManageConvoy()
 void ManageConvoy::startConveyor()
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
-		//Method to start the conveyor 
 		conveyor->startConveyor();
-		qDebug() << "tapis ON";
 	}
 }
 //Method to stop the conveyor
 void ManageConvoy::stopConveyor()
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
-		//Method to stop the conveyor 
 		conveyor->stopConveyor();
-		qDebug() << "tapis OFF";
 	}
 }
 //Method to connect to the ETZ512 card. If conection is succesful connect some slots to signals and instantiate the cylinders
@@ -51,9 +47,6 @@ void ManageConvoy::connectToHost()
 		connect(conveyor->getETZ512(), SIGNAL(onReadMultipleHoldingRegistersSentence(quint16, QVector<quint16>)), this, SLOT(receiveSensorsValues(quint16, QVector<quint16>)));
 		connect(conveyor->getETZ512(), SIGNAL(disconnected()), this, SLOT(onConveyorDisconnected()));
 		cylinders = new Cylinder(conveyor->getETZ512());
-		qDebug() << "Connected";
-	} else {
-		qDebug() << "Not connected";
 	}
 }
 //Method to push a cylinder
@@ -61,7 +54,6 @@ void ManageConvoy::pushCylinder(int checkoutNum)
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
 		cylinders->pushCylinder(checkoutNum);
-		qDebug() << "Verin " + QString::number(checkoutNum) + " active";
 	}
 }
 //Method to release a cylinder
@@ -69,16 +61,15 @@ void ManageConvoy::releaseCylinder(int checkoutNum)
 {
 	if (conveyor->getETZ512()->state() == QTcpSocket::ConnectedState) {
 		cylinders->releaseCylinder(checkoutNum);
-		qDebug() << "Verin " + QString::number(checkoutNum) + " desactive";
 	}
 }
 //Method to check to weight of an elevator and compare it with its own value plus the weight of the next medicine. If the weight is ahead of the maximum accepted, we send the elevator and return the number of the elevator. Else the new value is recorded and 0 is returned
 int ManageConvoy::checkWeight(float weight, int checkoutNum)
 {
 	QVector<float> weightValues = AllValuesSingleton::getInstance()->getWeightSensors();
-	
+
 	if (checkoutNum == 1) {
-		weightValues[0]+= weight;
+		weightValues[0] += weight;
 	}
 	else if (checkoutNum == 2) {
 		weightValues[1] += weight;
@@ -86,7 +77,7 @@ int ManageConvoy::checkWeight(float weight, int checkoutNum)
 	else if (checkoutNum == 3) {
 		weightValues[2] += weight;
 	}
-	
+
 	if (weightValues[0] > 2.04) {
 		int result = sendElevator(1);
 		return result;
@@ -156,8 +147,8 @@ int ManageConvoy::sendElevator(int checkoutNum)
 		arduino->sendElevator(checkoutNum);
 		return 3;
 	}
-		
-	
+
+
 }
 //Method to check if a medicine needs to be sent alone in an elevator. If it's the case , we send the elevator and return the number of the elevator. Else 0 is returned
 int ManageConvoy::checkAlone(bool alone, int checkoutNum)
@@ -187,6 +178,333 @@ void ManageConvoy::stateSensors()
 //Method to display the actual state of the system
 void ManageConvoy::display()
 {
+
+	console = GetStdHandle(STD_OUTPUT_HANDLE);
+
+
+	COORD coord;
+	QVector<bool> conveyorAndCylinders = AllValuesSingleton::getInstance()->getConveyorAndCyliders();
+	QVector<bool> sensors = AllValuesSingleton::getInstance()->getSensors();
+	QVector<float> weight = AllValuesSingleton::getInstance()->getWeightSensors();
+	QVector<float> length = AllValuesSingleton::getInstance()->getLengthSensors();
+	QVector<bool> elevatorButton = AllValuesSingleton::getInstance()->getElevatorButton();
+	QVector<bool> elevatorState = AllValuesSingleton::getInstance()->getElevatorState();
+
+	QString conveyor = QString::number(conveyorAndCylinders[0]);
+	QString cylinder1 = QString::number(conveyorAndCylinders[1]);
+	QString cylinder2 = QString::number(conveyorAndCylinders[2]);
+
+	QString sensor1 = QString::number(sensors[0]);
+	QString sensor2 = QString::number(sensors[1]);
+	QString sensor3 = QString::number(sensors[2]);
+
+	QString weight1 = QString::number(weight[0]);
+	QString weight2 = QString::number(weight[1]);
+	QString weight3 = QString::number(weight[2]);
+
+	QString length1 = QString::number(length[0]);
+	QString length2 = QString::number(length[1]);
+	QString length3 = QString::number(length[2]);
+
+	QString elevatorbutton1 = QString::number(elevatorButton[0]);
+	QString elevatorbutton2 = QString::number(elevatorButton[1]);
+	QString elevatorbutton3 = QString::number(elevatorButton[2]);
+
+	QString elevatorstate1 = QString::number(elevatorState[0]);
+	QString elevatorstate2 = QString::number(elevatorState[1]);
+	QString elevatorstate3 = QString::number(elevatorState[2]);
+
+	if (conveyor == '1') {
+		coord.X = 0;
+		coord.Y = 1;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Conveyor : ";
+		coord.X = 11;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 0;
+		coord.Y = 1;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Conveyor : ";
+		coord.X = 11;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (cylinder1 == '1') {
+		coord.X = 25;
+		coord.Y = 1;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Cylinder 1 : ";
+		coord.X = 38;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 25;
+		coord.Y = 1;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Cylinder 1 : ";
+		coord.X = 38;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (cylinder2 == '1') {
+		coord.X = 55;
+		coord.Y = 0;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Cylinder 2 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 1;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Cylinder 2 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	coord.X = 0;
+	coord.Y = 5;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Weight Checkout 1 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (weight[0] == 0) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << weight[0];
+	}
+
+	coord.X = 0;
+	coord.Y = 6;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Weight Checkout 2 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (weight[1] == 0) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << weight[1];
+	}
+
+	coord.X = 0;
+	coord.Y = 7;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Weight Checkout 3 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (weight[2] == 0.00) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << weight[2];
+	}
+
+	coord.X = 0;
+	coord.Y = 9;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Length Checkout 1 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (length[0] == 0.00) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << length[0];
+	}
+
+	coord.X = 0;
+	coord.Y = 10;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Length Checkout 2 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (length[1] == 0.00) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << length[1];
+	}
+
+	coord.X = 0;
+	coord.Y = 11;
+	SetConsoleCursorPosition(console, coord);
+	SetConsoleTextAttribute(console, text_color::White);
+	qDebug() << "Length Checkout 3 : ";
+	coord.X = 20;
+	SetConsoleCursorPosition(console, coord);
+	if (length[2] == 0.00) {
+		qDebug() << "0.00";
+	}
+	else {
+		qDebug() << length[2];
+	}
+
+	if (elevatorbutton1 == '1') {
+		coord.X = 55;
+		coord.Y = 5;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 1   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 5;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 1   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (elevatorbutton2 == '1') {
+		coord.X = 55;
+		coord.Y = 6;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 2   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 6;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 2   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (elevatorbutton3 == '1') {
+		coord.X = 55;
+		coord.Y = 7;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 3   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 7;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Button 3   : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (elevatorstate1 == '1') {
+		coord.X = 55;
+		coord.Y = 9;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 1 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 9;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 1 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (elevatorstate2 == '1') {
+		coord.X = 55;
+		coord.Y = 10;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 2 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 10;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 2 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+	}
+
+	if (elevatorstate3 == '1') {
+		coord.X = 55;
+		coord.Y = 11;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 3 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Green);
+		qDebug() << "true ";
+	}
+	else {
+		coord.X = 55;
+		coord.Y = 11;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::White);
+		qDebug() << "Elevator 3 : ";
+		coord.X = 68;
+		SetConsoleCursorPosition(console, coord);
+		SetConsoleTextAttribute(console, text_color::Red);
+		qDebug() << "false";
+
+	}
 }
 //Method to get the instance of the conveyor class
 Conveyor * ManageConvoy::getConveyor()
@@ -222,18 +540,11 @@ void ManageConvoy::receiveSensorsValues(quint16 address, QVector<quint16> values
 	bool value3;
 	if (address == conveyor->getSensorScanner())
 	{
-				
-			//qDebug() << "Capteur 1 : " + QString::number(values[1]);
-			value1 = values[1];
-		
-		
-			//qDebug() << "Capteur 2 : " + QString::number(values[2]);
-			value2 = values[2];
-		
-		
-			//qDebug() << "Capteur Scanner : " + QString::number(values[0]);
-			value3 = values[0];
-		
+		value1 = values[1];
+
+		value2 = values[2];
+
+		value3 = values[0];
 	}
 	instance = AllValuesSingleton::getInstance();
 	instance->setSensors(value1, value2, value3);

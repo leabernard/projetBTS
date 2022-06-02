@@ -37,9 +37,6 @@
     <ClCompile Include="ManageConvoy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MonMagnifiqueThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="qmodbustcpclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TCPServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,9 +66,6 @@
     <QtMoc Include="ManageConvoy.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="MonMagnifiqueThread.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="qmodbustcpclient.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -76,6 +73,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TCPServer.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="GlobalThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

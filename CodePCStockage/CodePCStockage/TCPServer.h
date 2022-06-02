@@ -3,6 +3,9 @@
 #include <QObject>
 #include <qtcpserver.h>
 #include <qtcpsocket.h>
+#include <qjsondocument.h>
+#include <qjsonvalue.h>
+#include <qjsonobject.h>
 
 class TCPServer : public QObject
 {
@@ -13,7 +16,7 @@ private:
 	//Database * db;
 	QVector<QTcpSocket *> tcpClients;
 public:
-	TCPServer(Database * db, QObject *parent);
+	TCPServer(/*Database * db,*/ QObject *parent);
 	void insertRequests(QByteArray message);
 	void selectRequests(QByteArray message);
 	~TCPServer();

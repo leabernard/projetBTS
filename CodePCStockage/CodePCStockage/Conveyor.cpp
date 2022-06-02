@@ -19,17 +19,12 @@ Conveyor::Conveyor(QObject *parent)
 {
 	//Initialization of the address of the modbus components 
 	conveyorAddress = 0000;
-	//sensor1 = 0001;
-	//sensor2 = 0002;
-	//sensorScanner = 0003;
-	sensor1 = 0002;
-	sensor2 = 0003;
 	sensorScanner = 0001;
 }
 
 Conveyor::~Conveyor()
 {
-	
+
 }
 //Method to start the conveyor
 void Conveyor::startConveyor()
@@ -46,10 +41,10 @@ void Conveyor::stopConveyor()
 //Method to ask for all sensors values
 void Conveyor::stateSensors()
 {
-	ETZ512->readMultipleHoldingRegistersFC3(0001, 3);
+	ETZ512->readMultipleHoldingRegistersFC3(sensorScanner, 3);
 }
 //Method to connect to the ETZ card via TCP. Reten true if the connection is successful and else if not. 
-bool Conveyor::connectToModbus() 
+bool Conveyor::connectToModbus()
 {
 	ETZ512 = new QModbusTcpClient("192.168.64.200", 502);
 	//Method to conect to the ETZ512 card
@@ -66,16 +61,6 @@ bool Conveyor::connectToModbus()
 QModbusTcpClient * Conveyor::getETZ512()
 {
 	return ETZ512;
-}
-
-quint16 Conveyor::getSensor1()
-{
-	return sensor1;
-}
-
-quint16 Conveyor::getSensor2()
-{
-	return sensor2;
 }
 
 quint16 Conveyor::getSensorScanner()

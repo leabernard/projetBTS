@@ -41,7 +41,6 @@ void Arduino::receivedData()
 	bool elevatorState1 = splitedData.at(6).toInt();
 	bool elevatorState2 = splitedData.at(7).toInt();
 	bool elevatorState3 = splitedData.at(8).toInt();
-	qDebug() << elevatorState1 << elevatorState2 << elevatorState3;
 
 	instance = AllValuesSingleton::getInstance();
 	instance->setWeightSensors(weight1, weight2, weight3);

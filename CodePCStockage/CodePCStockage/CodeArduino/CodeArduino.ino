@@ -1,5 +1,6 @@
 #include <SPI.h>
 #include <Ethernet.h>
+#include <IniFile.h>
 
 //Pin names
 #define LED1 2 //D2
@@ -12,9 +13,9 @@
 #define WEIGHT2 A1 //A1
 #define WEIGHT3 A2 //A2
 //Ethernet parameters
-byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};
-byte ip[] = {192, 168, 64, 201};
-byte server[] = {192, 168, 65, 103};
+byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};;
+//byte server[15];
+byte server[] = {192, 168, 65, 104};
 int retry = 0;
 //true when elevator is up 
 bool elevator1 = false;
@@ -26,13 +27,13 @@ EthernetClient client;
 
 void setup() {
   //Initialize ethernet
-  Ethernet.begin(MAC, ip);
+  Ethernet.begin(MAC);
   Serial.begin(9600);
   delay(1000);
   //Initialize pin
-  pinMode(LED1, INPUT);
-  pinMode(LED2, INPUT);
-  pinMode(LED3, INPUT);
+  pinMode(LED1, OUTPUT);
+  pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
   pinMode(BUTTON1, INPUT);
   pinMode(BUTTON2, INPUT);
   pinMode(BUTTON3, INPUT);
@@ -40,6 +41,22 @@ void setup() {
   pinMode(WEIGHT2, INPUT);
   pinMode(WEIGHT3, INPUT);
 
+   /*const char *filename = "/config.ini";
+  char address[15];
+  IniFile ini(filename);
+  if (!ini.open()) {
+    Serial.print("Ini file ");
+    Serial.print(filename);
+    Serial.println(" does not exist");
+  }
+
+  if (ini.getValue("SERVER", "Server", address, 15)){
+    for(int i = 0; i < 15; i++){
+      server[i] = address[i];
+      Serial.println(server[i]);
+    }
+  }*/
+  
   //connect to server
   connection();
   
@@ -58,10 +75,13 @@ void loop() {
     char c = client.read();
     if(c == '1'){
       elevator1 = true;
+      digitalWrite(LED1, HIGH);
     }else if(c == '2'){
       elevator2 = true;
+      digitalWrite(LED2, HIGH);
     }else if(c == '3'){
       elevator3 = true;
+      digitalWrite(LED3, HIGH);
     }
     Serial.println(c);
   }
@@ -72,26 +92,20 @@ void loop() {
   
   if(button1)
   {
-    digitalWrite(LED1, HIGH);
     elevator1 = false;
-  }else{
     digitalWrite(LED1, LOW);
   }
 
   if(button2)
   {
-    digitalWrite(LED1, HIGH);
     elevator2 = false;
-  }else{
-    digitalWrite(LED1, LOW);
+    digitalWrite(LED2, LOW);
   }
 
   if(button3)
   {
-    digitalWrite(LED1, HIGH);
     elevator3 = false;
-  }else{
-    digitalWrite(LED1, LOW);
+    digitalWrite(LED3, LOW);
   }
    
   int analWeight1 = analogRead(WEIGHT1);

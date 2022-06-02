@@ -89,9 +89,9 @@
     <ClCompile Include="Arduino.cpp" />
     <ClCompile Include="Conveyor.cpp" />
     <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="GlobalThread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManageConvoy.cpp" />
-    <ClCompile Include="MonMagnifiqueThread.cpp" />
     <ClCompile Include="qmodbustcpclient.cpp" />
     <ClCompile Include="reader.cpp" />
     <ClCompile Include="TCPServer.cpp" />
@@ -112,9 +112,6 @@
     <QtMoc Include="ManageConvoy.h" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="MonMagnifiqueThread.h" />
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="qmodbustcpclient.h" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +121,7 @@
     <QtMoc Include="TCPServer.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="GlobalThread.h" />
     <ClInclude Include="text_color.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

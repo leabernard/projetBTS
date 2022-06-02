@@ -117,3 +117,35 @@ QVector<bool> AllValuesSingleton::getElevatorState()
 	lock.unlock();
 	return result;
 }
+
+void AllValuesSingleton::setConveyor(bool conveyorState)
+{
+	lock.lock();
+	this->conveyorState = conveyorState;
+	lock.unlock();
+}
+
+void AllValuesSingleton::setCylinder1(bool cylinder1)
+{
+	lock.lock();
+	this->cylinder1 = cylinder1;
+	lock.unlock();
+}
+
+void AllValuesSingleton::setCylinder2(bool cylinder2)
+{
+	lock.lock();
+	this->cylinder2 = cylinder2;
+	lock.unlock();
+}
+
+QVector<bool> AllValuesSingleton::getConveyorAndCyliders()
+{
+	lock.lock();
+	QVector<bool> result;
+	result.push_back(conveyorState);
+	result.push_back(cylinder1);
+	result.push_back(cylinder2);
+	lock.unlock();
+	return result;
+}

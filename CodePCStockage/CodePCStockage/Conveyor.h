@@ -21,8 +21,6 @@ class Conveyor : public QObject
 
 private:
 	quint16 conveyorAddress;
-	quint16 sensor1;
-	quint16 sensor2;
 	quint16 sensorScanner;
 	QModbusTcpClient * ETZ512;
 
@@ -34,7 +32,5 @@ public:
 	void stateSensors();
 	bool connectToModbus();
 	QModbusTcpClient * getETZ512();
-	quint16 getSensor1();
-	quint16 getSensor2();
 	quint16 getSensorScanner();
 };

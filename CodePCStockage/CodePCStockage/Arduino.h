@@ -11,7 +11,7 @@ class Arduino : public QObject
 
 private:
 	QTcpServer * arduinoServer;
-	QTcpSocket * arduinoSocket;
+	QTcpSocket * arduinoSocket = nullptr;
 	AllValuesSingleton * instance;
 public:
 	Arduino(QObject *parent = Q_NULLPTR);

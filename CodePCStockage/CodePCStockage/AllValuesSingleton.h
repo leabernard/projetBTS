@@ -13,9 +13,9 @@ private:
 	float weight1 = 0.0;
 	float weight2 = 0.0;
 	float weight3 = 0.0;
-	float length1;
-	float length2;
-	float length3;
+	float length1 = 0.0;
+	float length2 = 0.0;
+	float length3 = 0.0;
 	bool elevatorButton1;
 	bool elevatorButton2;
 	bool elevatorButton3;
@@ -23,8 +23,12 @@ private:
 	bool elevatorState2;
 	bool elevatorState3;
 	static AllValuesSingleton * instance;
+	bool conveyorState = false;
+	bool cylinder1 = false;
+	bool cylinder2 = false;
 	AllValuesSingleton(QObject *parent = Q_NULLPTR);
 	~AllValuesSingleton();
+
 
 	QMutex lock;
 
@@ -40,4 +44,8 @@ public:
 	QVector<float> getLengthSensors();
 	void setElevatorState(bool elevatorState1, bool elevatorState2, bool elevatorState3);
 	QVector<bool>getElevatorState();
+	void setConveyor(bool conveyorState);
+	void setCylinder1(bool cylinder1);
+	void setCylinder2(bool cylinder2);
+	QVector<bool> getConveyorAndCyliders();
 };

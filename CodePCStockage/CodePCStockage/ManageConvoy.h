@@ -20,6 +20,7 @@
 #include <qmutex.h>
 #include <qsemaphore.h>
 #include "Arduino.h"
+#include "text_color.h"
 
 class ManageConvoy : public QObject
 {
@@ -33,6 +34,7 @@ private:
 	AllValuesSingleton * instance;
 	QSemaphore * endSemaphore;
 	bool termination;
+	HANDLE console;
 
 public:
 	ManageConvoy(QObject *parent = Q_NULLPTR);
@@ -73,5 +75,5 @@ public:
 public slots:
 	void receiveSensorsValues(quint16 address, QVector<quint16> values);
 	void onConveyorDisconnected();
-	
+
 };
