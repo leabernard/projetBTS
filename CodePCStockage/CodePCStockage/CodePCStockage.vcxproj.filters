@@ -49,6 +49,12 @@
     <ClCompile Include="GlobalThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scanner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AllValuesSingleton.h">
@@ -76,6 +82,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="GlobalThread.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Database.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Scanner.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

@@ -12,6 +12,7 @@
 //*********************************************************************************************
 #pragma once
 
+#include "Database.h"
 #include <qthread.h>
 #include <qmutex.h>
 #include <qdebug.h>
@@ -21,7 +22,7 @@
 #include "AllValuesSingleton.h"
 #include <qqueue.h>
 #include <signal.h>
-#include "reader.h"
+#include "Scanner.h"
 
 enum ConveyorState
 {
@@ -41,6 +42,7 @@ class GlobalThread : public QThread
 	QVector<bool> lastState;
 	QVector<float> lastWeightValues;
 	QVector<int> checkoutNumList;
+	QVector<int> orderIdList;
 	int medCount = 0;
 
 public:
@@ -59,9 +61,10 @@ protected:
 	virtual void run() override
 	{
 		srand(time(NULL));
-
+		Database * db = new Database();
+		db->start();
 		ManageConvoy * manager = new ManageConvoy();
-		Reader * reader = new Reader();
+		Scanner * scanner = new Scanner(db);
 		managerRef = manager;
 		manager->connectToHost();
 		bool isRunning = false;
@@ -113,10 +116,12 @@ protected:
 					QVector<float> weightValues = AllValuesSingleton::getInstance()->getWeightSensors();
 
 					//If something gets scanned
-					if (reader->getScanned()) {
-						reader->setScanned(false);
+					if (scanner->getHasScanned()) {
+						scanner->setHasScanned(false);
+						QVector<QVariant> scannedMedInfo = scanner->identifyMed(scanner->getBarCode());
 						//We push the checkout number in a list and organize the queues used to push the cylinders 
-						checkoutNumList.push_back(rand() % 3 + 1);
+						orderIdList.push_back(scannedMedInfo.at(4).toInt());
+						checkoutNumList.push_back(scannedMedInfo.at(1).toInt());
 						if (checkoutNumList.front() == 1) {
 							cylinder1WaitingLine.push_back(1);
 						}
@@ -129,11 +134,11 @@ protected:
 							cylinder2WaitingLine.push_back(0);
 						}
 						//Première valeur est le poids du medicament scanné. Le poids max d'une caisse est de 2.04 Check if a checkout need to send its elevator because of the weight
-						//int weightResult = manager->checkWeight(2.5, checkoutNumList.front());
+						int weightResult = manager->checkWeight(scannedMedInfo.at(3).toFloat(), checkoutNumList.front());
 						//Première valeur est la taille du medicament scanné. La taille max d'une caisse est de 80.00 Check if a checkout need to send its elevator because of the length
-						//int lengthResult = manager->checkLength(85.0, checkoutNumList.front());
+						int lengthResult = manager->checkLength(scannedMedInfo.at(0).toFloat(), checkoutNumList.front());
 						//We check which checkout sended its elevator and put a specific state for each checkout
-						/*if (weightResult != 0 || lengthResult != 0)
+						if (weightResult != 0 || lengthResult != 0)
 						{
 							if (weightResult == 1 || lengthResult == 1) {
 								state = WAIT_ELEVATOR1;
@@ -145,10 +150,10 @@ protected:
 								state = WAIT_ELEVATOR3;
 							}
 							
-						}*/
+						}
 
 						//We check if the current medicine needs to be conveyed alone 
-						int aloneResult = manager->checkAlone(1, checkoutNumList.front());
+						int aloneResult = manager->checkAlone(scannedMedInfo.at(2).toBool(), checkoutNumList.front());
 						//Check which checkout sended its elevator and put a specific state for each checkout
 						if (aloneResult != 0) {
 							if (aloneResult == 1) {

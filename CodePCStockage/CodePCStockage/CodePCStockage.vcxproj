@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;serialport;network</QtModules>
+    <QtModules>core;sql;network;serialport</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>msvc2017_64</QtInstall>
-    <QtModules>core;serialport;network</QtModules>
+    <QtModules>core;sql;network;serialport</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -89,11 +89,13 @@
     <ClCompile Include="Arduino.cpp" />
     <ClCompile Include="Conveyor.cpp" />
     <ClCompile Include="Cylinder.cpp" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="GlobalThread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManageConvoy.cpp" />
     <ClCompile Include="qmodbustcpclient.cpp" />
     <ClCompile Include="reader.cpp" />
+    <ClCompile Include="Scanner.cpp" />
     <ClCompile Include="TCPServer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +124,8 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GlobalThread.h" />
+    <QtMoc Include="Database.h" />
+    <QtMoc Include="Scanner.h" />
     <ClInclude Include="text_color.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
