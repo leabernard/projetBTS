@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>605</width>
+    <height>414</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -164,16 +164,265 @@
      <string>ID Caisse</string>
     </property>
    </widget>
+   <widget class="QTableView" name="tableCommande">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>20</y>
+      <width>541</width>
+      <height>301</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QTableView" name="tableFinancier">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>-10</y>
+      <width>591</width>
+      <height>341</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QCommandLinkButton" name="ajoutmedoc">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>270</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>valider</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="nom">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>30</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="codebarre">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>180</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="prixvente">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>30</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="prixachat">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>80</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="individual">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>140</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="largeur">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>190</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelNom">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>30</y>
+      <width>101</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>nom du medicament</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelHauteur">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>80</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>hauteur</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelLongueur">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>130</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>longueur</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelCodebarre">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>180</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>code-barre</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelprixVente">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>30</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>prix vente</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPrixAchat">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>80</y>
+      <width>61</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>prix achat</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelIndividual">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>140</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>individuel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>200</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>largeur</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelPoid">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>230</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>poid</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="poids">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>230</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="hauteur">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>80</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="longueur">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>130</y>
+      <width>113</width>
+      <height>20</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>605</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menubilan_des_commande">
+    <property name="title">
+     <string>menu</string>
+    </property>
+    <addaction name="actionbilan_financier"/>
+    <addaction name="actionbilan_commande"/>
+    <addaction name="actionajout_de_medicament"/>
+   </widget>
+   <addaction name="menubilan_des_commande"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -184,9 +433,26 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionbilan_financier">
+   <property name="text">
+    <string>bilan financier</string>
+   </property>
+  </action>
+  <action name="actionbilan_commande">
+   <property name="text">
+    <string>bilan commande</string>
+   </property>
+  </action>
+  <action name="actionajout_de_medicament">
+   <property name="text">
+    <string>ajout de medicament</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
+  <include location="pharmacien.qrc"/>
+  <include location="pharmacien.qrc"/>
   <include location="pharmacien.qrc"/>
  </resources>
  <connections>
@@ -222,9 +488,78 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionbilan_commande</sender>
+   <signal>triggered()</signal>
+   <receiver>pharmacienClass</receiver>
+   <slot>switchFenetre()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionbilan_financier</sender>
+   <signal>triggered()</signal>
+   <receiver>pharmacienClass</receiver>
+   <slot>Finance()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionajout_de_medicament</sender>
+   <signal>triggered()</signal>
+   <receiver>pharmacienClass</receiver>
+   <slot>ajoutMedoc()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ajoutmedoc</sender>
+   <signal>clicked()</signal>
+   <receiver>pharmacienClass</receiver>
+   <slot>recuperation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>155</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>patient()</slot>
   <slot>commande()</slot>
+  <slot>switchFenetre()</slot>
+  <slot>Finance()</slot>
+  <slot>ajoutMedoc()</slot>
+  <slot>recuperation()</slot>
+  <slot>test()</slot>
  </slots>
 </ui>

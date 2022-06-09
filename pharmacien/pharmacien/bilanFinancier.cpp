@@ -18,7 +18,7 @@ bilanFinancier::bilanFinancier(pharmacien * pharmacienUi, QWidget *parent)
 void bilanFinancier::Finance()
 {
 	Ui::pharmacienClass * ui = pharmacienUi->getUI();
-	qDebug() << "test";
+	//qDebug() << "test";
 
 	ui->boutonPatient->setVisible(false);
 	ui->image->setVisible(false);
@@ -35,20 +35,37 @@ void bilanFinancier::Finance()
 	ui->tableCommande->setVisible(false);
 	ui->validerCommande->setVisible(false);
 	ui->tableFinancier->setVisible(true);
+	ui->nom->setVisible(false);
+	ui->labelNom->setVisible(false);
+	ui->hauteur->setVisible(false);
+	ui->labelHauteur->setVisible(false);
+	ui->longueur->setVisible(false);
+	ui->codebarre->setVisible(false);
+	ui->labelCodebarre->setVisible(false);
+	ui->labelprixVente->setVisible(false);
+	ui->prixvente->setVisible(false);
+	ui->prixachat->setVisible(false);
+	ui->labelPrixAchat->setVisible(false);
+	ui->individual->setVisible(false);
+	ui->labelIndividual->setVisible(false);
+	ui->largeur->setVisible(false);
+	ui->label_4->setVisible(false);
+	ui->ajoutmedoc->setVisible(false);
+	ui->poids->setVisible(false);
+	ui->labelPoid->setVisible(false);
 	this->finance();
 }
 void bilanFinancier::finance()
 {
 	Ui::pharmacienClass * ui = pharmacienUi->getUI();
-
+	qDebug() << "test2";
 	QSqlQueryModel *model = new QSqlQueryModel;
-	model->setQuery("select * from medicament");
-	model->setHeaderData(0, Qt::Horizontal, tr("ID Commande"));
-	model->setHeaderData(1, Qt::Horizontal, tr("ID Med"));
-	model->setHeaderData(2, Qt::Horizontal, tr("ID Ordo"));
-	model->setHeaderData(3, Qt::Horizontal, tr("Nom"));
-	model->setHeaderData(4, Qt::Horizontal, tr("Quantite"));
+	model->setQuery("SELECT medicament.nom, (SUM(commande.quantite) * medicament.prix_vente_unitaire_ht) AS '  prix', SUM(commande.quantite) AS 'total_vendu' FROM medicament, commande WHERE commande.idmedicament = medicament.idmedicament GROUP BY commande.idmedicament");
+	model->setHeaderData(0, Qt::Horizontal, tr("nom"));
+	model->setHeaderData(1, Qt::Horizontal, tr("prix"));
+	model->setHeaderData(2, Qt::Horizontal, tr("total_vendu"));
+	
+	ui->tableFinancier->setModel(model);
 
-	ui->tableCommande->setModel(model);
 
 }
