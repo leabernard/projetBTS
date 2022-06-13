@@ -11,9 +11,8 @@
 //*
 //*********************************************************************************************
 #include <QtCore/QCoreApplication>
-#include "ManageConvoy.h"
 #include <qdebug.h>
-#include<Windows.h>
+#include <Windows.h>
 #include "GlobalThread.h"
 
 int main(int argc, char *argv[])

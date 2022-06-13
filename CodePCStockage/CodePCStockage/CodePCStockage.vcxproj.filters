@@ -40,9 +40,6 @@
     <ClCompile Include="qmodbustcpclient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TCPServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -73,9 +70,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="qmodbustcpclient.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="reader.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TCPServer.h">

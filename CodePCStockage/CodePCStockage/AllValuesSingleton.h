@@ -10,12 +10,12 @@ private:
 	bool sensor1 = false;
 	bool sensor2 = false;
 	bool sensorScanner = false;
-	float weight1 = 0.0;
-	float weight2 = 0.0;
-	float weight3 = 0.0;
-	float length1 = 0.0;
-	float length2 = 0.0;
-	float length3 = 0.0;
+	float weight1 = 0.000;
+	float weight2 = 0.000;
+	float weight3 = 0.000;
+	float length1 = 0.000;
+	float length2 = 0.000;
+	float length3 = 0.000;
 	bool elevatorButton1;
 	bool elevatorButton2;
 	bool elevatorButton3;
@@ -26,6 +26,7 @@ private:
 	bool conveyorState = false;
 	bool cylinder1 = false;
 	bool cylinder2 = false;
+	bool sensor3 = false;
 	AllValuesSingleton(QObject *parent = Q_NULLPTR);
 	~AllValuesSingleton();
 
@@ -48,4 +49,6 @@ public:
 	void setCylinder1(bool cylinder1);
 	void setCylinder2(bool cylinder2);
 	QVector<bool> getConveyorAndCyliders();
+	void setSensor3(bool sensor3);
+	bool getSensor3();
 };

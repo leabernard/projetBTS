@@ -1,22 +1,23 @@
 #include <SPI.h>
 #include <Ethernet.h>
 #include <IniFile.h>
+#include <SD.h>
+#include <Ultrasonic.h>
 
 //Pin names
 #define LED1 2 //D2
 #define LED2 3  //D3
-#define LED3 4  //D4
+#define LED3 5  //D5
 #define BUTTON1 6 //D6
 #define BUTTON2 7 //D7
 #define BUTTON3 8 //D8
-#define WEIGHT1 A0 //A0
-#define WEIGHT2 A1 //A1
-#define WEIGHT3 A2 //A2
+//const int chipSelect = 4;
 //Ethernet parameters
-byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};;
-//byte server[15];
-byte server[] = {192, 168, 65, 104};
-int retry = 0;
+byte MAC[] = {0x2C, 0xF7, 0xF1, 0x08, 0x3C, 0x2A};
+Ultrasonic ultrasonic(4);
+const size_t bufferLen = 80;
+char server[bufferLen];
+//byte server[] = {192, 168, 65, 104};
 //true when elevator is up 
 bool elevator1 = false;
 bool elevator2 = false;
@@ -29,6 +30,7 @@ void setup() {
   //Initialize ethernet
   Ethernet.begin(MAC);
   Serial.begin(9600);
+  SPI.begin();
   delay(1000);
   //Initialize pin
   pinMode(LED1, OUTPUT);
@@ -37,28 +39,10 @@ void setup() {
   pinMode(BUTTON1, INPUT);
   pinMode(BUTTON2, INPUT);
   pinMode(BUTTON3, INPUT);
-  pinMode(WEIGHT1, INPUT);
-  pinMode(WEIGHT2, INPUT);
-  pinMode(WEIGHT3, INPUT);
 
-   /*const char *filename = "/config.ini";
-  char address[15];
-  IniFile ini(filename);
-  if (!ini.open()) {
-    Serial.print("Ini file ");
-    Serial.print(filename);
-    Serial.println(" does not exist");
-  }
-
-  if (ini.getValue("SERVER", "Server", address, 15)){
-    for(int i = 0; i < 15; i++){
-      server[i] = address[i];
-      Serial.println(server[i]);
-    }
-  }*/
-  
+  pinMode(4, INPUT);
   //connect to server
-  connection();
+  //connection();
   
 }
 
@@ -68,83 +52,65 @@ void loop() {
   if(client.connected() != true)
   {
     connection();
-  }
-  char message[200];
-
-  if(client.available()){
-    char c = client.read();
-    if(c == '1'){
-      elevator1 = true;
-      digitalWrite(LED1, HIGH);
-    }else if(c == '2'){
-      elevator2 = true;
-      digitalWrite(LED2, HIGH);
-    }else if(c == '3'){
-      elevator3 = true;
-      digitalWrite(LED3, HIGH);
+  }else{
+    char message[200];
+  
+    if(client.available()){
+      char c = client.read();
+      if(c == '1'){
+        elevator1 = true;
+        digitalWrite(LED1, HIGH);
+      }else if(c == '2'){
+        elevator2 = true;
+        digitalWrite(LED2, HIGH);
+      }else if(c == '3'){
+        elevator3 = true;
+        digitalWrite(LED3, HIGH);
+      }
+      Serial.println(c);
     }
-    Serial.println(c);
+  
+    bool button1 = digitalRead(BUTTON1);
+    bool button2 = digitalRead(BUTTON2);
+    bool button3 = digitalRead(BUTTON3);
+
+    long rangeInCentimeters = ultrasonic.MeasureInCentimeters();
+    Serial.println(rangeInCentimeters);
+    
+    if(button1)
+    {
+      elevator1 = false;
+      digitalWrite(LED1, LOW);
+    }
+  
+    if(button2)
+    {
+      elevator2 = false;
+      digitalWrite(LED2, LOW);
+    }
+  
+    if(button3)
+    {
+      elevator3 = false;
+      digitalWrite(LED3, LOW);
+    }
+  
+    char measure[10];
+    dtostrf(rangeInCentimeters, 3, 0, measure);
+    snprintf(message, 200, "%c;%c;%c;%c;%c;%c;%s\n", button1 ? '1' : '0', button2 ? '1' : '0', button3 ? '1' : '0', elevator1 ? '1' : '0', elevator2 ? '1' : '0', elevator3 ? '1' : '0', measure);
+    client.write(message, strlen(message));
+
   }
-
-  bool button1 = digitalRead(BUTTON1);
-  bool button2 = digitalRead(BUTTON2);
-  bool button3 = digitalRead(BUTTON3);
-  
-  if(button1)
-  {
-    elevator1 = false;
-    digitalWrite(LED1, LOW);
-  }
-
-  if(button2)
-  {
-    elevator2 = false;
-    digitalWrite(LED2, LOW);
-  }
-
-  if(button3)
-  {
-    elevator3 = false;
-    digitalWrite(LED3, LOW);
-  }
-   
-  int analWeight1 = analogRead(WEIGHT1);
-  int analWeight2 = analogRead(WEIGHT2);
-  int analWeight3 = analogRead(WEIGHT3);
-  
-  float force1 = analWeight1 * 20 / 700;
-  float force2 = analWeight2 * 20 / 700;
-  float force3 = analWeight3 * 20 / 700;
-  
-  float weight1 = force1 / 9.81;
-  float weight2 = force2 / 9.81;
-  float weight3 = force3 / 9.81;
-  
-  char W1[10];
-  char W2[10];
-  char W3[10];
-  dtostrf(weight1, 4, 2, W1);
-  dtostrf(weight2, 4, 2, W2);
-  dtostrf(weight3, 4, 2, W3);
-
-
-  snprintf(message, 200, "%c;%c;%c;%s;%s;%s;%c;%c;%c\n", button1 ? '1' : '0', button2 ? '1' : '0', button3 ? '1' : '0', W1, W2, W3, elevator1 ? '1' : '0', elevator2 ? '1' : '0', elevator3 ? '1' : '0');
-  //Serial.println(message);
-  client.write(message, strlen(message));
-  
   
 }
 //Method to try 3 connections in a row 
 void connection() {
-  
-  while(!(client.connect(server, 502)) && retry < 3)
+  while(!(client.connect("192.168.65.104", 502)))
   {
-    retry++;
     Serial.println("autre");
     
   }
-  if(retry < 3)
+  
     Serial.println("connecté");
-  retry = 0;
 
 }

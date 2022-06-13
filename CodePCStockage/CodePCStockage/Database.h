@@ -22,5 +22,7 @@ public:
 	Database(QObject *parent = Q_NULLPTR);
 	~Database();
 	QSqlQuery selectDB(QString request);
+	int updateDB(QString request);
+	int insertDB(QString request);
 	void start();
 };

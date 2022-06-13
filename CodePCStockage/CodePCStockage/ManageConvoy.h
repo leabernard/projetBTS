@@ -12,6 +12,7 @@
 //*********************************************************************************************
 #pragma once
 
+#define myqDebug() qDebug() << fixed << qSetRealNumberPrecision(3)
 #include <QObject>
 #include "Conveyor.h"
 #include "Cylinder.h"
@@ -30,7 +31,7 @@ private:
 	Conveyor * conveyor;
 	Cylinder * cylinders;
 	Arduino * arduino;
-	int checkoutNum;
+	//int checkoutNum;
 	AllValuesSingleton * instance;
 	QSemaphore * endSemaphore;
 	bool termination;

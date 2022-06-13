@@ -149,3 +149,13 @@ QVector<bool> AllValuesSingleton::getConveyorAndCyliders()
 	lock.unlock();
 	return result;
 }
+
+void AllValuesSingleton::setSensor3(bool sensor3)
+{
+	this->sensor3 = sensor3;
+}
+
+bool AllValuesSingleton::getSensor3()
+{
+	return sensor3;
+}

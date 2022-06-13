@@ -16,21 +16,31 @@ Scanner::~Scanner()
 {
 }
 
-QVector<QVariant> Scanner::identifyMed(QString barCode)
+QVector<QVariant> Scanner::identifyMed()
 {
 	QVector<QVariant> medInfo;
 	QString requestSelectBarcode = "SELECT * FROM Commande, Medicament WHERE Commande.IDMedicament = Medicament.idmedicament AND Medicament.code_barre = " + barCode;
 	QSqlQuery responseVerifyingMed = db->selectDB(requestSelectBarcode);
-	if (responseVerifyingMed.size() > 0) {
-		QString requestMedInformation = "SELECT CASE WHEN medicament.longueur > medicament.hauteur AND medicament.longueur > medicament.largeur THEN medicament.longueur  WHEN medicament.hauteur > medicament.largeur THEN medicament.hauteur ELSE medicament.largeur END AS 'taille', ordonnance.idcaisse, medicament.individuel, medicament.poids, commande.idcommande FROM medicament, ordonnance, commande WHERE medicament.idmedicament = commande.idmedicament AND commande.idordonnance = ordonnance.idordonnance ORDER by ordonnance.date DESC LIMIT 1";
-		QSqlQuery responseMedInformation = db->selectDB(requestMedInformation);
+	
+	int responseVerifyingMedRowNumber;
+	if (responseVerifyingMed.last()) {
 
+		responseVerifyingMedRowNumber = responseVerifyingMed.at() + 1;
+		responseVerifyingMed.first();
+		responseVerifyingMed.previous();
+	}
+	if(responseVerifyingMedRowNumber > 0){
+
+		QString requestMedInformation = "SELECT CASE WHEN medicament.longueur > medicament.hauteur AND medicament.longueur > medicament.largeur THEN medicament.longueur  WHEN medicament.hauteur > medicament.largeur THEN medicament.hauteur ELSE medicament.largeur END AS 'taille', ordonnance.idcaisse, medicament.individuel, medicament.poids, commande.idcommande, ordonnance.idordonnance FROM medicament, ordonnance, commande WHERE medicament.idmedicament = commande.idmedicament AND commande.idordonnance = ordonnance.idordonnance AND commande.etatcommande = 0 AND medicament.code_barre = '" + barCode + "' ORDER by ordonnance.date DESC LIMIT 1";
+		QSqlQuery responseMedInformation = db->selectDB(requestMedInformation);
+		qDebug() << requestMedInformation;
 		if (responseMedInformation.next()) {
 			medInfo.push_back(responseMedInformation.value(0).toFloat());
 			medInfo.push_back(responseMedInformation.value(1).toInt());
 			medInfo.push_back(responseMedInformation.value(2).toInt());
 			medInfo.push_back(responseMedInformation.value(3).toFloat());
 			medInfo.push_back(responseMedInformation.value(4).toInt());
+			medInfo.push_back(responseMedInformation.value(5).toInt());
 			return medInfo;
 		}
 		
@@ -62,9 +72,89 @@ QString Scanner::getBarCode()
 	return barCode;
 }
 
-void Scanner::getNumberOfOrder()
+void Scanner::incrementDeliveredQuantity(int idOrder, int idPrescription)
 {
+	QString requestIncrementQuantity = "UPDATE commande SET quantite_livree = quantite_livree + 1 WHERE idcommande = " + QString::number(idOrder);
+	if (db->updateDB(requestIncrementQuantity)) {
+		QString requestQuantities = "SELECT quantite, quantite_livree FROM commande WHERE idcommande = " + QString::number(idOrder);
+		QSqlQuery responseQuantites = db->selectDB(requestQuantities);
+		int responseQuantitesRowNumber = 0;
+		if (responseQuantites.last())
+		{
+			responseQuantitesRowNumber = responseQuantites.at() + 1;
+			responseQuantites.first();
+			responseQuantites.previous();
+		}
+		
+		if (responseQuantitesRowNumber > 0) {
+			responseQuantites.next();
+			int quantity = responseQuantites.value(0).toInt();
+			int deliveredQuantity = responseQuantites.value(1).toInt();
+			if (quantity == deliveredQuantity) {
+				QString requestOrderState = "UPDATE commande SET etatcommande = true WHERE idcommande = " + QString::number(idOrder);
+				db->updateDB(requestOrderState);
+			}
+		}
+		int rowFinished = 0;
+		QString requestAllQuantitiesFromPrescription = "SELECT etatcommande FROM commande WHERE idordonnance = " + QString::number(idPrescription);
+		QSqlQuery responseAllQuantitiesFromPrescription = db->selectDB(requestAllQuantitiesFromPrescription);
 
+		int responseAllQuantitiesFromPrescriptionRowNumber;
+		if (responseAllQuantitiesFromPrescription.last()) {
+			responseAllQuantitiesFromPrescriptionRowNumber = responseAllQuantitiesFromPrescription.at() + 1; responseAllQuantitiesFromPrescription.at() + 1;
+			responseAllQuantitiesFromPrescription.first();
+			responseAllQuantitiesFromPrescription.previous();
+		}
+
+		if (responseAllQuantitiesFromPrescriptionRowNumber > 0) {
+			for (int i = 0; i < responseAllQuantitiesFromPrescriptionRowNumber; i++) {
+				responseAllQuantitiesFromPrescription.next();
+				bool state = responseAllQuantitiesFromPrescription.value(0).toBool();
+				if (state)
+					rowFinished++;
+			}
+		}
+		if (rowFinished == responseAllQuantitiesFromPrescriptionRowNumber) {
+			endOfOrder = true;
+		}
+		
+	}
+}
+
+bool Scanner::orderAvailable()
+{
+	QString requestOrderAvailable = "SELECT * FROM commande WHERE etatcommande = false";
+	QSqlQuery responseOrderAvailable = db->selectDB(requestOrderAvailable);
+	int responseOrderAvailableRowNumber = 0;
+	if (responseOrderAvailable.last())
+	{
+		responseOrderAvailableRowNumber = responseOrderAvailable.at() + 1;
+		responseOrderAvailable.first();
+		responseOrderAvailable.previous();
+	}
+	if(responseOrderAvailableRowNumber > 0)
+		return true;
+	return false;
+}
+
+bool Scanner::getEndOfOrder()
+{
+	return endOfOrder;
+}
+
+void Scanner::setEndOfOrder(bool state)
+{
+	endOfOrder = state;
+}
+
+void Scanner::setMedicineScanned(bool state)
+{
+	medicineScanned = state;
+}
+
+bool Scanner::getMedicineScanned()
+{
+	return medicineScanned;
 }
 
 void Scanner::receiveMessage() 
@@ -75,5 +165,6 @@ void Scanner::receiveMessage()
 		barCode = QString(data).remove("\r\n");
 		scanner->clear();
 		hasScanned = true;
+		medicineScanned = true;
 	}
 }

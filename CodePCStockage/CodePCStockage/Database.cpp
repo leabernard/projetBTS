@@ -14,9 +14,27 @@ Database::~Database()
 QSqlQuery Database::selectDB(QString request)
 {
 	QSqlQuery selectRequest;
-	selectRequest.prepare(request);
-	selectRequest.exec();
+	selectRequest.exec(request);
 	return selectRequest;
+}
+
+int Database::updateDB(QString request)
+{
+	QSqlQuery updateRequest;
+	if(updateRequest.exec(request))
+		return 1;
+	//A TESTER CAR LE UPDATE NE S'EXECUTE PAS
+	qDebug() << updateRequest.lastError();
+	return 0;
+}
+
+int Database::insertDB(QString request)
+{
+	QSqlQuery insertRequest;
+	if(insertRequest.exec(request))
+		return 1;
+	qDebug() << insertRequest.lastError();
+	return 0;
 }
 
 void Database::start() {
@@ -25,7 +43,9 @@ void Database::start() {
 	QDir dbPath;
 	QString path = dbPath.currentPath() + "pharmacie.db";
 	QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+	db.setDatabaseName(path);
 	if (QFile::exists(path)) {
+		
 		if (!db.open()) {
 			/*coord.X = 80;
 			coord.Y = 1;
@@ -45,7 +65,6 @@ void Database::start() {
 		
 	}
 	else {
-		db.setDatabaseName(path);
 		if (!db.open()) {
 			qDebug() << "Probleme d'ouverture";
 		}
@@ -54,6 +73,7 @@ void Database::start() {
 			QSqlQuery createMedicamentTable;
 			QSqlQuery createOrdonnanceTable;
 			QSqlQuery createCommandeTable;
+			QSqlQuery createLogTable;
 			createMedicamentTable.prepare("create table medicament "
 				"(idmedicament integer primary key autoincrement, "
 				"code_barre int, "
@@ -65,8 +85,6 @@ void Database::start() {
 				"prix_vente_unitaire_ht float, "
 				"individuel bool, "
 				"poids float)");
-			qDebug() << createMedicamentTable.exec();
-			qDebug() << createMedicamentTable.lastError().text();
 
 
 			createOrdonnanceTable.prepare("create table ordonnance "
@@ -74,8 +92,6 @@ void Database::start() {
 				"nompatient varchar(20), "
 				"idcaisse int, "
 				"date DATE DEFAULT (DATETIME(CURRENT_TIMESTAMP, 'LOCALTIME')))");
-			qDebug() << createOrdonnanceTable.exec();
-			qDebug() << createOrdonnanceTable.lastError().text();
 
 
 			createCommandeTable.prepare("create table commande "
@@ -85,11 +101,12 @@ void Database::start() {
 				"quantite int, "
 				"quantite_livree integer, "
 				"etatcommande bool, "
+				"Nom varchar(20), "
 				"FOREIGN KEY(idmedicament) REFERENCES medicament(idmedicament), "
 				"FOREIGN KEY(idordonnance) REFERENCES ordonnance(idordonnance)) "
 			);
-			qDebug() << createCommandeTable.exec();
-			qDebug() << createCommandeTable.lastError().text();
+
+			qDebug() << "Database connected launch the application once more";
 		}
 	}
 	

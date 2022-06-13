@@ -34,18 +34,25 @@ void Arduino::receivedData()
 	bool button2 = splitedData.at(1).toInt();
 	bool button3 = splitedData.at(2).toInt();
 
-	float weight1 = splitedData.at(3).toFloat();
-	float weight2 = splitedData.at(4).toFloat();
-	float weight3 = splitedData.at(5).toFloat();
+	bool elevatorState1 = splitedData.at(3).toInt();
+	bool elevatorState2 = splitedData.at(4).toInt();
+	bool elevatorState3 = splitedData.at(5).toInt();
+	
+	QString sensor3result = splitedData.at(6);
+	sensor3result = sensor3result.remove("\n").toInt();
 
-	bool elevatorState1 = splitedData.at(6).toInt();
-	bool elevatorState2 = splitedData.at(7).toInt();
-	bool elevatorState3 = splitedData.at(8).toInt();
+	bool stateSensor3 = false;
+	if (sensor3result <= 10) {
+		stateSensor3 = true;
+	}
+	else {
+		stateSensor3 = false;
+	}
 
 	instance = AllValuesSingleton::getInstance();
-	instance->setWeightSensors(weight1, weight2, weight3);
 	instance->setElevatorButton(button1, button2, button3);
 	instance->setElevatorState(elevatorState1, elevatorState2, elevatorState3);
+	instance->setSensor3(stateSensor3);
 }
 
 void Arduino::arduinoDisconnected()

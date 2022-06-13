@@ -94,7 +94,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ManageConvoy.cpp" />
     <ClCompile Include="qmodbustcpclient.cpp" />
-    <ClCompile Include="reader.cpp" />
     <ClCompile Include="Scanner.cpp" />
     <ClCompile Include="TCPServer.cpp" />
   </ItemGroup>
@@ -115,9 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qmodbustcpclient.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtMoc Include="reader.h" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="TCPServer.h" />

@@ -6,6 +6,13 @@
 #include <qjsondocument.h>
 #include <qjsonvalue.h>
 #include <qjsonobject.h>
+#include "Database.h"
+#include <qjsonarray.h>
+#include <qsqlrecord.h>
+#include <qdebug.h>
+#include <qsqlfield.h>
+#include "ManageConvoy.h"
+#include <qtimer.h>
 
 class TCPServer : public QObject
 {
@@ -13,15 +20,18 @@ class TCPServer : public QObject
 
 private:
 	QTcpServer * server;
-	//Database * db;
+	Database * db;
+	ManageConvoy * manager;
 	QVector<QTcpSocket *> tcpClients;
+	QTimer * timer;
 public:
-	TCPServer(/*Database * db,*/ QObject *parent);
-	void insertRequests(QByteArray message);
-	void selectRequests(QByteArray message);
+	TCPServer(Database * db, ManageConvoy * manager, QObject *parent = Q_NULLPTR);
 	~TCPServer();
 public slots:
 	void onServerNewConnection();
 	void onClientNewCommunication();
 	void onClientDisonnection();
+	void unwantedMedicine();
+	void sendSystemState();
+	void medicineNotScanned();
 };
