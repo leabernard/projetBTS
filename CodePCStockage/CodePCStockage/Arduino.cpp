@@ -22,7 +22,6 @@ QTcpSocket * Arduino::getArduinoSocket()
 //Method to send the checkout number to the arduino 
 void Arduino::sendElevator(int checkoutNum)
 {
-	qDebug() << "Send " << checkoutNum << " to arduino";
 	arduinoSocket->write(QByteArray::number(checkoutNum));
 }
 //Method to receive and interpret the response of the arduino and record the values of the sensors conected to the arduino
@@ -59,12 +58,10 @@ void Arduino::arduinoDisconnected()
 {
 	//Demander a gremont ne rentre pas dans le disconnect 
 	arduinoSocket->deleteLater();
-	qDebug() << "Arduino deconnectee";
 }
 //Method to retrieve the conection and conect slots to signal
 void Arduino::arduinoConnection() {
 	arduinoSocket = arduinoServer->nextPendingConnection();
 	connect(arduinoSocket, SIGNAL(readyRead()), this, SLOT(receivedData()));
 	connect(arduinoSocket, SIGNAL(disconnected()), this, SLOT(arduinoDisconnected()));
-	qDebug() << "Arduino connectee";
 }

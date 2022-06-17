@@ -31,7 +31,7 @@ QVector<QVariant> Scanner::identifyMed()
 	}
 	if(responseVerifyingMedRowNumber > 0){
 
-		QString requestMedInformation = "SELECT CASE WHEN medicament.longueur > medicament.hauteur AND medicament.longueur > medicament.largeur THEN medicament.longueur  WHEN medicament.hauteur > medicament.largeur THEN medicament.hauteur ELSE medicament.largeur END AS 'taille', ordonnance.idcaisse, medicament.individuel, medicament.poids, commande.idcommande, ordonnance.idordonnance FROM medicament, ordonnance, commande WHERE medicament.idmedicament = commande.idmedicament AND commande.idordonnance = ordonnance.idordonnance AND commande.etatcommande = 0 AND medicament.code_barre = '" + barCode + "' ORDER by ordonnance.date DESC LIMIT 1";
+		QString requestMedInformation = "SELECT CASE WHEN medicament.longueur > medicament.hauteur AND medicament.longueur > medicament.largeur THEN medicament.longueur  WHEN medicament.hauteur > medicament.largeur THEN medicament.hauteur ELSE medicament.largeur END AS 'taille', ordonnance.idcaisse, medicament.individuel, medicament.poids, commande.idcommande, ordonnance.idordonnance FROM medicament, ordonnance, commande WHERE medicament.idmedicament = commande.idmedicament AND commande.idordonnance = ordonnance.idordonnance AND commande.etatcommande = 0 AND medicament.code_barre = '" + barCode + "' ORDER by ordonnance.date ASC LIMIT 1";
 		QSqlQuery responseMedInformation = db->selectDB(requestMedInformation);
 		qDebug() << requestMedInformation;
 		if (responseMedInformation.next()) {

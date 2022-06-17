@@ -6,7 +6,11 @@ TCPServer::TCPServer(Database * db, ManageConvoy * manager, QObject *parent)
 	this->manager = manager;
 	server = new QTcpServer(this);
 	server->listen(QHostAddress::AnyIPv4, 777);
+	timer = new QTimer();
+	timer->start(5000);
+	connect(timer, SIGNAL(timeout()), this, SLOT(sendSystemState()));
 	connect(server, SIGNAL(newConnection()), this, SLOT(onServerNewConnection()));
+
 //	timer->start(5000);
 //	connect(timer, SIGNAL(timeout()), this, SLOT(sendSystemState()));
 }
@@ -18,7 +22,6 @@ TCPServer::~TCPServer()
 void TCPServer::onServerNewConnection()
 {
 	QTcpSocket * socket = server->nextPendingConnection();
-	qDebug() << "client connecte";
 	connect(socket, SIGNAL(readyRead()), this, SLOT(onClientNewCommunication()));
 	connect(socket, SIGNAL(disconnected()), this, SLOT(onClientDisonnection()));
 	
@@ -88,7 +91,7 @@ void TCPServer::onClientDisonnection()
 {
 	QTcpSocket * socket = qobject_cast<QTcpSocket*>(sender());
 	disconnect(socket, SIGNAL(readyRead()), this, SLOT(onClientNewCommunication()));
-	disconnect(socket, SIGNAL(disconected()), this, SLOT(onClientDisonnection()));
+	disconnect(socket, SIGNAL(disconnected()), this, SLOT(onClientDisonnection()));
 	tcpClients.removeOne(socket);
 	socket->deleteLater();
 }
@@ -117,7 +120,7 @@ void TCPServer::sendSystemState()
 	}
 	else {
 		object.insert("Type", "State");
-		object.insert("Content", "OK");
+		object.insert("Content", "NOK");
 	}
 	stateMessage.setObject(object);
 	for (QTcpSocket * socket : tcpClients)
